@@ -16,6 +16,10 @@ public class JobInstanceMapper extends ModelMapperCommon<JobInstance, JobInstanc
 
     @PostConstruct
     public void postConstruct() {
-     
+        super.getModelMapper().typeMap(JobInstance.class, JobInstanceDTO.class).addMappings(mapper -> {
+            mapper.map(src -> src.getUserWorker().getId(), JobInstanceDTO::setUserWorkerId);
+            mapper.map(src -> src.getUserCustomer().getId(), JobInstanceDTO::setUserCustomerId);
+            mapper.map(src -> src.getJob().getId(), JobInstanceDTO::setJobId);
+        });
     }
 }
