@@ -22,6 +22,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO get(Long id) throws ApplicationException {
+
+
         Optional<User> modelOpt  =this.userRepository.findById(id);
         if (modelOpt.isEmpty()){
             throw new ApplicationException("User not found");

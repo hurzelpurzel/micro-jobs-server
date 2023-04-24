@@ -22,9 +22,11 @@ public class Job extends ModelCommon {
     @Column(name = "type", nullable = false)
     private String type;
 
+    @Column(name = "status", nullable = false)
+    private Integer status;
+
     @OneToMany(mappedBy = "job")
     private Set<JobInstance> jobInstanceSet;
-
 
     @OneToMany(mappedBy = "job")
     private Set<JobPicture> jobPictureSet;
