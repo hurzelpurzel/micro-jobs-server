@@ -13,4 +13,4 @@ Micro Jobs is a small platform that allows users to offer or to request services
 - Git.
 
 # Architecture
-- [Database](micro-jobs.png)
+- ![Database](micro-jobs.png)
