@@ -10,8 +10,8 @@ public class ModelMapperCommon<S, D> {
     @Autowired
     @Qualifier("modelMapperBean")
     private ModelMapper modelMapperBean;
-    private Type sourceType;
-    private Type destinationType;
+    private final Type sourceType;
+    private final Type destinationType;
 
     public ModelMapperCommon(Class<S> modelClazz, Class<D> dtoClass) {
         this.sourceType = modelClazz;

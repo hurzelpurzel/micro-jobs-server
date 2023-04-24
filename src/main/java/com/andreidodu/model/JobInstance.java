@@ -6,6 +6,17 @@ import jakarta.persistence.*;
 @Table(name = "mj_job_instance")
 public class JobInstance extends ModelCommon {
 
+    public JobInstance() {
+        super();
+    }
+
+    public JobInstance(User userWorker, User userCustomer, Job job, Integer status) {
+        this.userWorker = userWorker;
+        this.userCustomer = userCustomer;
+        this.job = job;
+        this.status = status;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
