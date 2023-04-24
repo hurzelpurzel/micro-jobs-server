@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JobInstanceDTO {
+public class JobInstanceDTO extends DTOCommon {
 
     private Long id;
     private Long userWorkerId;
