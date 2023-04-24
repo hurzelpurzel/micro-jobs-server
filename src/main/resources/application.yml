@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/microjobs
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        format_sql: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:/database/db.changelog.xml
+    enabled: true
+server:
+  port: 8080
+spring.datasource.testOnBorrow: true
+spring.datasource.timeBetweenEvictionRunsMillis: 60000
+spring.datasource.validationQuery: SELECT 1

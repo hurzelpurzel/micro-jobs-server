@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="2023-04-24-000" author="Andrei Dodu">
+        <createTable tableName="${tablePrefix}user">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="username" type="VARCHAR(35)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2023-04-24-001" author="Andrei Dodu">
+        <createTable tableName="${tablePrefix}payment_type">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_payment_type"/>
+            </column>
+            <column name="paypal_email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_user_payment_type"
+                             references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2023-04-24-002" author="Andrei Dodu" dbms="${dbms}">
+        <createTable tableName="${tablePrefix}job">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_job"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <!-- OFFER / REQUEST -->
+            <column name="type" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2023-04-24-003" author="Andrei Dodu" dbms="${dbms}">
+        <createTable tableName="${tablePrefix}job_picture">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_job_picture"/>
+            </column>
+            <column name="job_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_job_job_picture" references="${tablePrefix}job(id)"/>
+            </column>
+            <column name="picture" type="BLOB"/>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2023-04-24-004" author="Andrei Dodu">
+        <createTable tableName="${tablePrefix}job_instance">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_job_instance"/>
+            </column>
+            <column name="user_worker_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_worker_job_instance"
+                             references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="user_customer_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_customer_job_instance"
+                             references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="job_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_job_job_instance" references="${tablePrefix}job(id)"/>
+            </column>
+            <column name="status" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2023-04-24-005" author="Andrei Dodu" dbms="${dbms}">
+        <createTable tableName="${tablePrefix}user_picture">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_picture"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_user_user_picture"
+                             references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="picture" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2023-04-24-006" author="Andrei Dodu" dbms="${dbms}">
+        <createTable tableName="${tablePrefix}rating">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_rating"/>
+            </column>
+            <column name="user_voter_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_voter_rating" references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="user_target_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_target_rating" references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="job_instance_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_job_instance_rating" references="${tablePrefix}job_instance(id)"/>
+            </column>
+            <column name="rating" type="INT"/>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+        <addUniqueConstraint
+                columnNames="user_voter_id, user_target_id, job_instance_id"
+                constraintName="rating_unique"
+                tableName="${tablePrefix}rating"
+        />
+    </changeSet>
+
+
+    <changeSet id="2023-04-24-007" author="Andrei Dodu" dbms="${dbms}">
+        <createTable tableName="${tablePrefix}message">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_message"/>
+            </column>
+            <column name="user_from_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_from_rating" references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="user_to_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_to_rating" references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="message" type="TEXT"/>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
