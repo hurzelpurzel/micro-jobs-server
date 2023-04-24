@@ -147,6 +147,9 @@
             <column name="job_instance_id" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="fk_job_instance_rating" references="${tablePrefix}job_instance(id)"/>
             </column>
+            <column name="comment" type="TEXT">
+                <constraints />
+            </column>
             <column name="rating" type="INT"/>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>

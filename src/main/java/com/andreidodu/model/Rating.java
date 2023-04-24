@@ -23,6 +23,9 @@ public class Rating extends ModelCommon {
     @Column(name = "rating", nullable = false)
     private Integer rating;
 
+    @Column(name = "comment")
+    private String comment;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "job_instance_id", referencedColumnName = "id", nullable = false)
     private JobInstance jobInstance;
