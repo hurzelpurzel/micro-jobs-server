@@ -14,8 +14,4 @@ public class JobMapper extends ModelMapperCommon<Job, JobDTO> {
         super(Job.class, JobDTO.class);
     }
 
-    @PostConstruct
-    public void postConstruct() {
-     
-    }
 }
