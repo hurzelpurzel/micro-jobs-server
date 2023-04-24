@@ -21,16 +21,16 @@ public class User extends ModelCommon {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "status", nullable = false)
     private Integer status;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private PaymentType paymentType;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserPicture userPicture;
 
 

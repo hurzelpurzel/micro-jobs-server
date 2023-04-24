@@ -1,4 +1,4 @@
-package com.andreidodu.service;
+package com.andreidodu.service.impl;
 
 
 import com.andreidodu.dto.UserDTO;
@@ -6,6 +6,7 @@ import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.UserMapper;
 import com.andreidodu.model.User;
 import com.andreidodu.repository.UserRepository;
+import com.andreidodu.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,12 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDTO get(Long id) {
-        return this.userMapper.toDTO(this.userRepository.findById(id).get());
+    public UserDTO get(Long id) throws ApplicationException {
+        Optional<User> modelOpt  =this.userRepository.findById(id);
+        if (modelOpt.isEmpty()){
+            throw new ApplicationException("User not found");
+        }
+        return this.userMapper.toDTO(modelOpt.get());
     }
 
     @Override

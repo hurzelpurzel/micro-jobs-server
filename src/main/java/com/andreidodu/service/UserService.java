@@ -4,7 +4,7 @@ import com.andreidodu.dto.UserDTO;
 import com.andreidodu.exception.ApplicationException;
 
 public interface UserService {
-    UserDTO get(Long id);
+    UserDTO get(Long id) throws ApplicationException;
 
     void delete(Long id);
 

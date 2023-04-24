@@ -8,19 +8,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/review")
+@RequestMapping(value = "/user")
 @RequiredArgsConstructor
 public class UserController {
 
     final private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> get(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> get(@PathVariable Long id) throws ApplicationException {
         return ResponseEntity.ok(this.userService.get(id));
     }
 
     @PostMapping
     public ResponseEntity<UserDTO> save(@RequestBody UserDTO userDTO) {
+        userDTO.setStatus(0);
         return ResponseEntity.ok(this.userService.save(userDTO));
     }
 

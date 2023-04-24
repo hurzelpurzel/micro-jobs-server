@@ -19,9 +19,7 @@
             <column name="password" type="VARCHAR(35)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="text">
-                <constraints nullable="false"/>
-            </column>
+            <column name="description" type="text"/>
             <column name="status" type="INT">
                 <constraints nullable="false"/>
             </column>
