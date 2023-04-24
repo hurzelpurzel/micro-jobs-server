@@ -9,8 +9,8 @@ Micro Jobs is a small platform that allows users to offer or to request services
 - Hibernate;
 - Spring JPA;
 - PostgreSQL;
-- Gradle
-- Git
+- Gradle;
+- Git.
 
 # Architecture
 #### Database
