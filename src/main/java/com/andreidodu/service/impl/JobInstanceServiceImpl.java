@@ -43,6 +43,18 @@ public class JobInstanceServiceImpl implements JobInstanceService {
 
     @Override
     public JobInstanceDTO save(JobInstanceDTO jobInstanceDTO) throws ApplicationException {
+        if (jobInstanceDTO.getUserCustomerId() == null) {
+            throw new ApplicationException("Customer is mandatory");
+        }
+        if (jobInstanceDTO.getUserWorkerId() == null) {
+            throw new ApplicationException("Worker is mandatory");
+        }
+        if (jobInstanceDTO.getJobId() == null) {
+            throw new ApplicationException("Job is mandatory");
+        }
+        if (jobInstanceDTO.getUserCustomerId().equals(jobInstanceDTO.getUserWorkerId())) {
+            throw new ApplicationException("Worker can't match with Customer");
+        }
         Optional<User> userWorkerOpt = this.userRepository.findById(jobInstanceDTO.getUserWorkerId());
         if (userWorkerOpt.isEmpty()) {
             throw new ApplicationException("Worker not found");
