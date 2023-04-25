@@ -79,7 +79,8 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_job_picture"/>
             </column>
             <column name="job_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_job_job_picture" references="${tablePrefix}job(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_job_job_picture"
+                             references="${tablePrefix}job(id)"/>
             </column>
             <column name="picture" type="BLOB"/>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
@@ -120,7 +121,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_picture"/>
             </column>
             <column name="user_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_user_user_picture"
+                <constraints nullable="false" foreignKeyName="fk_user_user_picture" unique="true"
                              references="${tablePrefix}user(id)"/>
             </column>
             <column name="picture" type="BLOB">
