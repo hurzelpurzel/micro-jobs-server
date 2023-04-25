@@ -1,6 +1,6 @@
 # Micro Jobs
 
-Micro Jobs is a small platform that allows users to offer or to request services.
+Micro Jobs is a small platform that allows users to offer or to request services in return for money.
 
 # Technologies
 - Java;
