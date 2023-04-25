@@ -15,4 +15,6 @@ public interface JobService {
     JobDTO save(JobDTO jobDTO);
 
     JobDTO update(Long id, JobDTO jobDTO) throws ApplicationException;
+
+    long countByType(int type);
 }

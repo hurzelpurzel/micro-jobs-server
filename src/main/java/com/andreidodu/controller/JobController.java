@@ -1,6 +1,7 @@
 package com.andreidodu.controller;
 
 import com.andreidodu.constants.JobConst;
+import com.andreidodu.dto.GenericResponse;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.JobService;
@@ -27,6 +28,16 @@ public class JobController {
     @GetMapping("/offers/{page}")
     public ResponseEntity<List<JobDTO>> getAllOffers(@PathVariable Integer page) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_OFFER, page));
+    }
+
+    @GetMapping("/count/requests")
+    public ResponseEntity<GenericResponse<Long>> getCountRequests() throws ApplicationException {
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(JobConst.TYPE_REQUEST)));
+    }
+
+    @GetMapping("/count/offers")
+    public ResponseEntity<GenericResponse<Long>> getCountOffers() throws ApplicationException {
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(JobConst.TYPE_OFFER)));
     }
 
     @GetMapping("/requests/{page}")

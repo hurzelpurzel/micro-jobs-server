@@ -67,4 +67,9 @@ public class JobServiceImpl implements JobService {
 
     }
 
+    @Override
+    public long countByType(int type) {
+        return this.jobRepository.countByType(type);
+    }
+
 }
