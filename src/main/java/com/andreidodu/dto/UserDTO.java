@@ -12,7 +12,7 @@ public class UserDTO extends DTOCommon {
     private String username;
     private String email;
     private String password;
-    private String descritpion;
+    private String description;
     private Integer status;
 
 
