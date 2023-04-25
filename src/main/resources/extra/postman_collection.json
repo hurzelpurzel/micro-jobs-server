@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"mario.gialli\",\n    \"email\": \"mario.gialli@email.com\",\n    \"password\": \"ThisIsASecret\",\n    \"description\": \"This is my micro-jobs profile\"\n}",
+							"raw": "{\n    \"username\": \"mario.rossi\",\n    \"email\": \"mario.rossi@email.com\",\n    \"password\": \"ThisIsASecret\",\n    \"description\": \"This is my micro-jobs profile\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -219,7 +219,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userWorkerId\": 1,\n    \"userCustomerId\": 3,\n    \"jobId\": 1\n}",
+							"raw": "{\n    \"userWorkerId\": 4,\n    \"userCustomerId\": 6,\n    \"jobId\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,7 +321,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userVoterId\": 1,\n    \"userTargetId\": 3,\n    \"jobInstanceId\": 1,\n    \"comment\": \"bel lavoro\",\n    \"rating\": 5\n}",
+							"raw": "{\n    \"userVoterId\": 6,\n    \"userTargetId\": 4,\n    \"jobInstanceId\": 2,\n    \"comment\": \"bel lavoro\",\n    \"rating\": 5\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -348,7 +348,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/rating/1",
+							"raw": "http://localhost:8080/rating/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -356,7 +356,7 @@
 							"port": "8080",
 							"path": [
 								"rating",
-								"1"
+								"3"
 							]
 						}
 					},
@@ -405,6 +405,108 @@
 							"port": "8080",
 							"path": [
 								"rating",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "message",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userFromId\": 1,\n    \"userToId\": 2,\n    \"message\": \"Hello World!\",\n    \"status\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/message",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/message/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"message",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"userFromId\": 1,\n    \"userToId\": 2,\n    \"message\": \"Hello awesome World!\",\n    \"status\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/message/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"message",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/message/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"message",
 								"1"
 							]
 						}
