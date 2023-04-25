@@ -8,7 +8,7 @@ import java.util.List;
 public interface JobService {
     JobDTO get(Long id) throws ApplicationException;
 
-    List<JobDTO> getAll(int type) throws ApplicationException;
+    List<JobDTO> getAll(int type, int page) throws ApplicationException;
 
     void delete(Long id);
 

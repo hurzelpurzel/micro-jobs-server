@@ -1,13 +1,15 @@
 package com.andreidodu.service.impl;
 
-import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.model.Job;
+import com.andreidodu.repository.JobPageableRepository;
 import com.andreidodu.repository.JobRepository;
 import com.andreidodu.service.JobService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
+    private final JobPageableRepository jobPageableRepository;
 
     private final JobMapper jobMapper;
 
@@ -31,8 +34,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<JobDTO> getAll(int type) throws ApplicationException {
-       List<Job> models = this.jobRepository.findByType(type);
+    public List<JobDTO> getAll(int type, int page) throws ApplicationException {
+        Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
+        List<Job> models = this.jobPageableRepository.findByType(type, secondPageWithFiveElements);
         return this.jobMapper.toListDTO(models);
     }
 

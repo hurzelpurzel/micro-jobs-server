@@ -23,14 +23,14 @@ public class JobController {
         return ResponseEntity.ok(this.jobService.get(id));
     }
 
-    @GetMapping("/offers")
-    public ResponseEntity<List<JobDTO>> getAllOffers() throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_OFFER));
+    @GetMapping("/offers/{page}")
+    public ResponseEntity<List<JobDTO>> getAllOffers(@PathVariable Integer page) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_OFFER, page));
     }
 
-    @GetMapping("/requests")
-    public ResponseEntity<List<JobDTO>> getAllRequests() throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_REQUEST));
+    @GetMapping("/requests/{page}")
+    public ResponseEntity<List<JobDTO>> getAllRequests(@PathVariable Integer page) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_REQUEST, page));
     }
 
     @PostMapping
