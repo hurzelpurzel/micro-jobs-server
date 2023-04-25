@@ -4,7 +4,6 @@ import com.andreidodu.constants.JobInstantConst;
 import com.andreidodu.dto.JobInstanceDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.JobInstanceMapper;
-import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.model.Job;
 import com.andreidodu.model.JobInstance;
 import com.andreidodu.model.User;
@@ -12,7 +11,6 @@ import com.andreidodu.repository.JobInstanceRepository;
 import com.andreidodu.repository.JobRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.JobInstanceService;
-import com.andreidodu.service.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
