@@ -44,15 +44,15 @@ public class MessageServiceImpl implements MessageService {
         if (messageDTO.getUserToId() == null) {
             throw new ApplicationException("User to is null");
         }
-        if (messageDTO.getUserFromId().equals(messageDTO.getUserToId())){
+        if (messageDTO.getUserFromId().equals(messageDTO.getUserToId())) {
             throw new ApplicationException("User from can not match with user to");
         }
         Optional<User> userFromOpt = this.userRepository.findById(messageDTO.getUserFromId());
-        if (userFromOpt.isEmpty()){
+        if (userFromOpt.isEmpty()) {
             throw new ApplicationException("User from not found");
         }
         Optional<User> userToOpt = this.userRepository.findById(messageDTO.getUserToId());
-        if (userToOpt.isEmpty()){
+        if (userToOpt.isEmpty()) {
             throw new ApplicationException("User to not found");
         }
         Message model = this.messageMapper.toModel(messageDTO);
@@ -64,7 +64,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageDTO update(Long id, MessageDTO messageDTO) throws ApplicationException {
-        if (id != messageDTO.getId()) {
+        if (!id.equals(messageDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         if (messageDTO.getUserFromId() == null) {
@@ -73,7 +73,7 @@ public class MessageServiceImpl implements MessageService {
         if (messageDTO.getUserToId() == null) {
             throw new ApplicationException("User to is null");
         }
-        if (messageDTO.getUserFromId().equals(messageDTO.getUserToId())){
+        if (messageDTO.getUserFromId().equals(messageDTO.getUserToId())) {
             throw new ApplicationException("User from can not match with user to");
         }
         Optional<Message> messageOpt = this.messageRepository.findById(id);

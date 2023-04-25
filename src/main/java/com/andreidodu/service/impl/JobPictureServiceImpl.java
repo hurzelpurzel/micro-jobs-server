@@ -51,7 +51,7 @@ public class JobPictureServiceImpl implements JobPictureService {
 
     @Override
     public JobPictureDTO update(Long id, JobPictureDTO jobPictureDTO) throws ApplicationException {
-        if (id != jobPictureDTO.getId()) {
+        if (!id.equals(jobPictureDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         Optional<JobPicture> userOpt = this.jobPictureRepository.findById(id);

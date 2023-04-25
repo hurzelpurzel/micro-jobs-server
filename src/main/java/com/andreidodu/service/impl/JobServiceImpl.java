@@ -21,8 +21,8 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO get(Long id) throws ApplicationException {
-        Optional<Job> modelOpt  =this.jobRepository.findById(id);
-        if (modelOpt.isEmpty()){
+        Optional<Job> modelOpt = this.jobRepository.findById(id);
+        if (modelOpt.isEmpty()) {
             throw new ApplicationException("Job not found");
         }
         return this.jobMapper.toDTO(modelOpt.get());
@@ -36,13 +36,12 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobDTO save(JobDTO jobDTO) {
         final Job user = this.jobRepository.save(this.jobMapper.toModel(jobDTO));
-        JobDTO JobDTOSaved = this.jobMapper.toDTO(user);
-        return JobDTOSaved;
+        return this.jobMapper.toDTO(user);
     }
 
     @Override
     public JobDTO update(Long id, JobDTO jobDTO) throws ApplicationException {
-        if (id != jobDTO.getId()) {
+        if (!id.equals(jobDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         Optional<Job> userOpt = this.jobRepository.findById(id);

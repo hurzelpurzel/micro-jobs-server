@@ -71,7 +71,7 @@ public class JobInstanceServiceImpl implements JobInstanceService {
 
     @Override
     public JobInstanceDTO update(Long id, JobInstanceDTO jobInstanceDTO) throws ApplicationException {
-        if (id != jobInstanceDTO.getId()) {
+        if (!id.equals(jobInstanceDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         Optional<JobInstance> userOpt = this.jobInstanceRepository.findById(id);

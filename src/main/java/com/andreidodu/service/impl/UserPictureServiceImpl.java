@@ -50,16 +50,16 @@ public class UserPictureServiceImpl implements UserPictureService {
 
     @Override
     public UserPictureDTO update(Long id, UserPictureDTO userPictureDTO) throws ApplicationException {
-        if (id != userPictureDTO.getId()) {
+        if (!id.equals(userPictureDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         Optional<UserPicture> userOpt = this.userPictureRepository.findById(id);
         if (userOpt.isEmpty()) {
             throw new ApplicationException("user picture not found");
         }
-        UserPicture jobPicture = userOpt.get();
-        this.userPictureMapper.getModelMapper().map(userPictureDTO, jobPicture);
-        UserPicture userSaved = this.userPictureRepository.save(jobPicture);
+        UserPicture userPicture = userOpt.get();
+        this.userPictureMapper.getModelMapper().map(userPictureDTO, userPicture);
+        UserPicture userSaved = this.userPictureRepository.save(userPicture);
         return this.userPictureMapper.toDTO(userSaved);
 
     }

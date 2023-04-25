@@ -50,16 +50,16 @@ public class PaymentTypeServiceImpl implements PaymentTypeService {
 
     @Override
     public PaymentTypeDTO update(Long id, PaymentTypeDTO paymentTypeDTO) throws ApplicationException {
-        if (id != paymentTypeDTO.getId()) {
+        if (!id.equals(paymentTypeDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         Optional<PaymentType> userOpt = this.paymentTypeRepository.findById(id);
         if (userOpt.isEmpty()) {
             throw new ApplicationException("job not found");
         }
-        PaymentType user = userOpt.get();
-        this.paymentTypeMapper.getModelMapper().map(paymentTypeDTO, user);
-        PaymentType userSaved = this.paymentTypeRepository.save(user);
+        PaymentType paymentType = userOpt.get();
+        this.paymentTypeMapper.getModelMapper().map(paymentTypeDTO, paymentType);
+        PaymentType userSaved = this.paymentTypeRepository.save(paymentType);
         return this.paymentTypeMapper.toDTO(userSaved);
 
     }

@@ -22,10 +22,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO get(Long id) throws ApplicationException {
-
-
-        Optional<User> modelOpt  =this.userRepository.findById(id);
-        if (modelOpt.isEmpty()){
+        Optional<User> modelOpt = this.userRepository.findById(id);
+        if (modelOpt.isEmpty()) {
             throw new ApplicationException("User not found");
         }
         return this.userMapper.toDTO(modelOpt.get());
@@ -39,13 +37,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO save(UserDTO userDTO) {
         final User user = this.userRepository.save(this.userMapper.toModel(userDTO));
-        UserDTO userDTOSaved = this.userMapper.toDTO(user);
-        return userDTOSaved;
+        return this.userMapper.toDTO(user);
     }
 
     @Override
     public UserDTO update(Long id, UserDTO userDTO) throws ApplicationException {
-        if (id != userDTO.getId()) {
+        if (!id.equals(userDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         Optional<User> userOpt = this.userRepository.findById(id);

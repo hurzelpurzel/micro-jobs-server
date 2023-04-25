@@ -76,7 +76,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public RatingDTO update(Long id, RatingDTO ratingDTO) throws ApplicationException {
-        if (id != ratingDTO.getId()) {
+        if (!id.equals(ratingDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
         Optional<Rating> ratingOpt = this.ratingRepository.findById(id);
