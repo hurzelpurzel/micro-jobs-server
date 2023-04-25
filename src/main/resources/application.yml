@@ -1,4 +1,7 @@
+spring.mvc.dispatch-options-request: true
 spring:
+  mvc:
+    dispatch-options-request=true:
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/microjobs
@@ -21,3 +24,4 @@ server:
 spring.datasource.testOnBorrow: true
 spring.datasource.timeBetweenEvictionRunsMillis: 60000
 spring.datasource.validationQuery: SELECT 1
+
