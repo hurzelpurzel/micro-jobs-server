@@ -1,4 +1,4 @@
-# Micro Jobs
+# MicroJobs
 
 Micro Jobs is a small platform that allows users to offer or to request services in return for money.
 
