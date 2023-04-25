@@ -23,6 +23,9 @@ public class Message extends ModelCommon {
     @Column(name = "message", nullable = false)
     private String message;
 
+    @Column(name = "status", nullable = false)
+    private Integer status;
+
     public Long getId() {
         return id;
     }
@@ -53,6 +56,14 @@ public class Message extends ModelCommon {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     @Override

@@ -145,10 +145,11 @@
                 <constraints nullable="false" foreignKeyName="fk_target_rating" references="${tablePrefix}user(id)"/>
             </column>
             <column name="job_instance_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_job_instance_rating" references="${tablePrefix}job_instance(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_job_instance_rating"
+                             references="${tablePrefix}job_instance(id)"/>
             </column>
             <column name="comment" type="TEXT">
-                <constraints />
+                <constraints/>
             </column>
             <column name="rating" type="INT"/>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
@@ -175,6 +176,9 @@
                 <constraints nullable="false" foreignKeyName="fk_to_rating" references="${tablePrefix}user(id)"/>
             </column>
             <column name="message" type="TEXT"/>
+            <column name="status" type="INT">
+                <constraints nullable="false"/>
+            </column>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="version" type="INT"/>
