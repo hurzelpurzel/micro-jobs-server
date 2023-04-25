@@ -42,6 +42,9 @@
                 <constraints nullable="false" foreignKeyName="fk_user_payment_type"
                              references="${tablePrefix}user(id)"/>
             </column>
+            <column name="type" type="INT">
+                <constraints nullable="false"/>
+            </column>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="version" type="INT"/>
