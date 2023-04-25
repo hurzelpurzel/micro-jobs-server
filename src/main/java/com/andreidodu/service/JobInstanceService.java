@@ -8,7 +8,7 @@ public interface JobInstanceService {
 
     void delete(Long id);
 
-    JobInstanceDTO save(JobInstanceDTO jobDTO) throws ApplicationException;
+    JobInstanceDTO save(JobInstanceDTO jobInstanceDTO) throws ApplicationException;
 
-    JobInstanceDTO update(Long id, JobInstanceDTO jobDTO) throws ApplicationException;
+    JobInstanceDTO update(Long id, JobInstanceDTO jobInstanceDTO) throws ApplicationException;
 }

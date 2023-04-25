@@ -21,13 +21,13 @@ public class PaymentTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<PaymentTypeDTO> save(@RequestBody PaymentTypeDTO userDTO) throws ApplicationException {
-        return ResponseEntity.ok(this.paymentTypeService.save(userDTO));
+    public ResponseEntity<PaymentTypeDTO> save(@RequestBody PaymentTypeDTO paymentTypeDTO) throws ApplicationException {
+        return ResponseEntity.ok(this.paymentTypeService.save(paymentTypeDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PaymentTypeDTO> update(@PathVariable Long id, @RequestBody PaymentTypeDTO userDTO) throws ApplicationException {
-        return ResponseEntity.ok(this.paymentTypeService.update(id, userDTO));
+    public ResponseEntity<PaymentTypeDTO> update(@PathVariable Long id, @RequestBody PaymentTypeDTO paymentTypeDTO) throws ApplicationException {
+        return ResponseEntity.ok(this.paymentTypeService.update(id, paymentTypeDTO));
     }
 
     @DeleteMapping("/{id}")

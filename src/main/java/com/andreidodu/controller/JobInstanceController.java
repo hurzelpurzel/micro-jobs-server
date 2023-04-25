@@ -21,14 +21,14 @@ public class JobInstanceController {
     }
 
     @PostMapping
-    public ResponseEntity<JobInstanceDTO> save(@RequestBody JobInstanceDTO userDTO) throws ApplicationException {
-        userDTO.setStatus(0);
-        return ResponseEntity.ok(this.jobInstanceService.save(userDTO));
+    public ResponseEntity<JobInstanceDTO> save(@RequestBody JobInstanceDTO jobInstanceDTO) throws ApplicationException {
+        jobInstanceDTO.setStatus(0);
+        return ResponseEntity.ok(this.jobInstanceService.save(jobInstanceDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<JobInstanceDTO> update(@PathVariable Long id, @RequestBody JobInstanceDTO userDTO) throws ApplicationException {
-        return ResponseEntity.ok(this.jobInstanceService.update(id, userDTO));
+    public ResponseEntity<JobInstanceDTO> update(@PathVariable Long id, @RequestBody JobInstanceDTO jobInstanceDTO) throws ApplicationException {
+        return ResponseEntity.ok(this.jobInstanceService.update(id, jobInstanceDTO));
     }
 
     @DeleteMapping("/{id}")

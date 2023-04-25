@@ -18,6 +18,13 @@ public class PaymentType extends ModelCommon {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Long getId() {
         return id;
