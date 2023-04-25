@@ -19,7 +19,7 @@ public class UserPicture extends ModelCommon {
     @Column(name = "picture", nullable = false)
     private Byte[] picture;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 

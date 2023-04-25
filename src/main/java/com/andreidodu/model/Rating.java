@@ -14,11 +14,11 @@ public class Rating extends ModelCommon {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_voter_id", referencedColumnName = "id", nullable = false)
     private User userVoter;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_target_id", referencedColumnName = "id", nullable = false)
     private User userTarget;
 
@@ -28,7 +28,7 @@ public class Rating extends ModelCommon {
     @Column(name = "comment")
     private String comment;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "job_instance_id", referencedColumnName = "id", nullable = false)
     private JobInstance jobInstance;
 

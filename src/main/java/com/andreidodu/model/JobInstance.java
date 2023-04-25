@@ -24,11 +24,11 @@ public class JobInstance extends ModelCommon {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_worker_id", referencedColumnName = "id", nullable = false)
     private User userWorker;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_customer_id", referencedColumnName = "id", nullable = false)
     private User userCustomer;
 
