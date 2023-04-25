@@ -1,10 +1,12 @@
 package com.andreidodu.model;
 
 import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "mj_message", uniqueConstraints =
 @UniqueConstraint(columnNames = {"user_from_id", "user_to_id", "insert_date"}))
+@EntityListeners(AuditingEntityListener.class)
 public class Message extends ModelCommon {
 
     @Id

@@ -1,9 +1,11 @@
 package com.andreidodu.model;
 
 import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "mj_payment_type")
+@EntityListeners(AuditingEntityListener.class)
 public class PaymentType extends ModelCommon {
 
     @Id

@@ -2,9 +2,11 @@ package com.andreidodu.model;
 
 import jakarta.persistence.*;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "mj_user")
+@EntityListeners(AuditingEntityListener.class)
 public class User extends ModelCommon {
 
     @Id

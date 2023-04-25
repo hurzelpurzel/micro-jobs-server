@@ -44,9 +44,8 @@ public class JobPictureServiceImpl implements JobPictureService {
         }
         JobPicture model = this.jobPictureMapper.toModel(jobPictureDTO);
         model.setJob(job.get());
-        final JobPicture user = this.jobPictureRepository.save(model);
-        JobPictureDTO JobPictureDTOSaved = this.jobPictureMapper.toDTO(user);
-        return JobPictureDTOSaved;
+        final JobPicture jobPicture = this.jobPictureRepository.save(model);
+        return this.jobPictureMapper.toDTO(jobPicture);
     }
 
     @Override

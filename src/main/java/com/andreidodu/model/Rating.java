@@ -1,10 +1,12 @@
 package com.andreidodu.model;
 
 import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "mj_rating", uniqueConstraints =
 @UniqueConstraint(columnNames = {"user_voter_id", "user_target_id", "job_instance_id"}))
+@EntityListeners(AuditingEntityListener.class)
 public class Rating extends ModelCommon {
 
     @Id

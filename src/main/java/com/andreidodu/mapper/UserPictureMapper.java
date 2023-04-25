@@ -1,5 +1,6 @@
 package com.andreidodu.mapper;
 
+import com.andreidodu.dto.JobPictureDTO;
 import com.andreidodu.dto.UserPictureDTO;
 import com.andreidodu.model.UserPicture;
 import jakarta.annotation.PostConstruct;
@@ -21,6 +22,7 @@ public class UserPictureMapper extends ModelMapperCommon<UserPicture, UserPictur
 
         getModelMapper().typeMap(UserPicture.class, UserPictureDTO.class).addMappings(mapper -> {
             mapper.using(ConverterCommon.BYTES_TO_STRING).<String>map(UserPicture::getPicture, UserPictureDTO::setPicture);
+            mapper.map(src -> src.getUser().getId(), UserPictureDTO::setUserId);
         });
     }
 

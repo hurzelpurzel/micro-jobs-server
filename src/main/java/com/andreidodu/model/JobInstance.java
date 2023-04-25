@@ -1,9 +1,11 @@
 package com.andreidodu.model;
 
 import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "mj_job_instance")
+@EntityListeners(AuditingEntityListener.class)
 public class JobInstance extends ModelCommon {
 
     public JobInstance() {

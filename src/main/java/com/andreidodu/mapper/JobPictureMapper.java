@@ -22,6 +22,7 @@ public class JobPictureMapper extends ModelMapperCommon<JobPicture, JobPictureDT
 
         getModelMapper().typeMap(JobPicture.class, JobPictureDTO.class).addMappings(mapper -> {
             mapper.using(ConverterCommon.BYTES_TO_STRING).<String>map(JobPicture::getPicture, JobPictureDTO::setPicture);
+            mapper.map(src -> src.getJob().getId(), JobPictureDTO::setJobId);
         });
     }
 
