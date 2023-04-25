@@ -1,5 +1,6 @@
 package com.andreidodu.service.impl;
 
+import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.JobMapper;
@@ -9,6 +10,7 @@ import com.andreidodu.service.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +28,12 @@ public class JobServiceImpl implements JobService {
             throw new ApplicationException("Job not found");
         }
         return this.jobMapper.toDTO(modelOpt.get());
+    }
+
+    @Override
+    public List<JobDTO> getAll(int type) throws ApplicationException {
+       List<Job> models = this.jobRepository.findByType(type);
+        return this.jobMapper.toListDTO(models);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class Job extends ModelCommon {
     private String description;
 
     @Column(name = "type", nullable = false)
-    private String type;
+    private Integer type;
 
     @Column(name = "status", nullable = false)
     private Integer status;
@@ -57,11 +57,11 @@ public class Job extends ModelCommon {
         this.description = description;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

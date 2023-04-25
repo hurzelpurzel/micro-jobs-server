@@ -64,7 +64,7 @@
                 <constraints nullable="false"/>
             </column>
             <!-- OFFER / REQUEST -->
-            <column name="type" type="VARCHAR(30)">
+            <column name="type" type="INT">
                 <constraints nullable="false"/>
             </column>
             <column name="status" type="INT">

@@ -1,11 +1,14 @@
 package com.andreidodu.service;
 
 import com.andreidodu.dto.JobDTO;
-import com.andreidodu.dto.UserDTO;
 import com.andreidodu.exception.ApplicationException;
+
+import java.util.List;
 
 public interface JobService {
     JobDTO get(Long id) throws ApplicationException;
+
+    List<JobDTO> getAll(int type) throws ApplicationException;
 
     void delete(Long id);
 
