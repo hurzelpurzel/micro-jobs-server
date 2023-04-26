@@ -23,13 +23,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/user",
+							"raw": "http://localhost:8080/api/v1/user",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"user"
 							]
 						}
@@ -51,13 +53,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/user",
+							"raw": "http://localhost:8080/api/v1/user",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"user"
 							]
 						}
@@ -70,13 +74,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/user/1",
+							"raw": "http://localhost:8080/api/v1/user/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"user",
 								"1"
 							]
@@ -99,13 +105,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/user/1",
+							"raw": "http://localhost:8080/api/v1/user/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"user",
 								"1"
 							]
@@ -119,13 +127,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/user/1",
+							"raw": "http://localhost:8080/api/v1/user/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"user",
 								"1"
 							]
@@ -139,13 +149,19 @@
 			"name": "job",
 			"item": [
 				{
-					"name": "create",
+					"name": "create offer",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJpby5yb3NzaSIsImlhdCI6MTY4MjU0NjU2NSwiZXhwIjoxNjgyNTQ2NjI1fQ.S1Jmaa2gaTx2o72JsPOEvToYe6R61_ryDuVrC9jpcQ8",
+								"type": "default"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Offro creazione logo\",\n    \"description\": \"Offro la possibilità di creare logo personalizzati per la propria azienda.\",\n    \"type\": 1\n}",
+							"raw": "{\n    \"title\": \"Offro creazione logo\",\n    \"description\": \"Offro la possibilità di creare logo personalizzati per la propria azienda.\",\n    \"type\": 0\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -153,13 +169,45 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/job",
+							"raw": "http://localhost:8080/api/v1/job",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
+								"job"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Cerco creazione logo 1\",\n    \"description\": \"Cerco la possibilità di creare logo personalizzati per la propria azienda.\",\n    \"type\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/job",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
 								"job"
 							]
 						}
@@ -172,13 +220,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/job/1",
+							"raw": "http://localhost:8080/api/v1/job/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"job",
 								"1"
 							]
@@ -201,13 +251,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/job/1",
+							"raw": "http://localhost:8080/api/v1/job/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"job",
 								"1"
 							]
@@ -221,13 +273,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/job/1",
+							"raw": "http://localhost:8080/api/v1/job/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"job",
 								"1"
 							]
@@ -241,13 +295,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/job/offers/1",
+							"raw": "http://localhost:8080/api/v1/job/offers/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"job",
 								"offers",
 								"1"
@@ -262,13 +318,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/job/requests/0",
+							"raw": "http://localhost:8080/api/v1/job/requests/0",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"job",
 								"requests",
 								"0"
@@ -297,13 +355,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/jobPicture",
+							"raw": "http://localhost:8080/api/v1/jobPicture",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobPicture"
 							]
 						}
@@ -316,13 +376,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/jobPicture/1",
+							"raw": "http://localhost:8080/api/v1/jobPicture/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobPicture",
 								"1"
 							]
@@ -345,13 +407,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/jobPicture/1",
+							"raw": "http://localhost:8080/api/v1/jobPicture/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobPicture",
 								"1"
 							]
@@ -365,13 +429,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/jobPicture/1",
+							"raw": "http://localhost:8080/api/v1/jobPicture/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobPicture",
 								"1"
 							]
@@ -399,13 +465,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/userPicture",
+							"raw": "http://localhost:8080/api/v1/userPicture",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"userPicture"
 							]
 						}
@@ -418,13 +486,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/userPicture/1",
+							"raw": "http://localhost:8080/api/v1/userPicture/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"userPicture",
 								"1"
 							]
@@ -447,13 +517,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/userPicture/1",
+							"raw": "http://localhost:8080/api/v1/userPicture/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"userPicture",
 								"1"
 							]
@@ -467,13 +539,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/userPicture/1",
+							"raw": "http://localhost:8080/api/v1/userPicture/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"userPicture",
 								"1"
 							]
@@ -501,13 +575,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/jobInstance",
+							"raw": "http://localhost:8080/api/v1/jobInstance",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobInstance"
 							]
 						}
@@ -520,13 +596,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/jobInstance/1",
+							"raw": "http://localhost:8080/api/v1/jobInstance/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobInstance",
 								"1"
 							]
@@ -549,13 +627,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/jobInstance/1",
+							"raw": "http://localhost:8080/api/v1/jobInstance/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobInstance",
 								"1"
 							]
@@ -569,13 +649,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/jobInstance/1",
+							"raw": "http://localhost:8080/api/v1/jobInstance/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"jobInstance",
 								"1"
 							]
@@ -603,13 +685,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/rating",
+							"raw": "http://localhost:8080/api/v1/rating",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"rating"
 							]
 						}
@@ -622,13 +706,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/rating/1",
+							"raw": "http://localhost:8080/api/v1/rating/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"rating",
 								"1"
 							]
@@ -651,13 +737,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/rating/1",
+							"raw": "http://localhost:8080/api/v1/rating/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"rating",
 								"1"
 							]
@@ -671,13 +759,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/rating/1",
+							"raw": "http://localhost:8080/api/v1/rating/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"rating",
 								"1"
 							]
@@ -705,13 +795,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/message",
+							"raw": "http://localhost:8080/api/v1/message",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"message"
 							]
 						}
@@ -724,13 +816,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/message/1",
+							"raw": "http://localhost:8080/api/v1/message/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"message",
 								"1"
 							]
@@ -753,13 +847,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/message/1",
+							"raw": "http://localhost:8080/api/v1/message/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"message",
 								"1"
 							]
@@ -773,13 +869,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/message/1",
+							"raw": "http://localhost:8080/api/v1/message/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"message",
 								"1"
 							]
@@ -807,13 +905,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/paymentType",
+							"raw": "http://localhost:8080/api/v1/paymentType",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"paymentType"
 							]
 						}
@@ -826,13 +926,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/paymentType/1",
+							"raw": "http://localhost:8080/api/v1/paymentType/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"paymentType",
 								"1"
 							]
@@ -855,13 +957,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/paymentType/1",
+							"raw": "http://localhost:8080/api/v1/paymentType/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"paymentType",
 								"1"
 							]
@@ -875,15 +979,112 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/paymentType/1",
+							"raw": "http://localhost:8080/api/v1/paymentType/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"paymentType",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n\"firstname\": \"Mario\",\n\"lastname\": \"Rossi\",\n\"username\": \"mario.rossi\",\n\"email\": \"mario@rossi.com\",\n\"password\": \"test\",\n\"description\": \"This is Mario!\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "authenticate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"username\": \"mario.rossi\",\n\"password\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refreshToken",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJpby5yb3NzaSIsImlhdCI6MTY4MjU0NjMyMiwiZXhwIjoxNjgzMTUxMTIyfQ.PuiR_AMzCAApBUUj5_b96cPbpzk-s-2RH9LItKAZa64",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/refreshToken",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refreshToken"
 							]
 						}
 					},
