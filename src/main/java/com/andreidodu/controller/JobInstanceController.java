@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/jobInstance")
+@RequestMapping(value = "/api/v1/jobInstance")
 @RequiredArgsConstructor
 public class JobInstanceController {
 

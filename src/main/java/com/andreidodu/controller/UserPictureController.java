@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/userPicture")
+@RequestMapping(value = "/api/v1/userPicture")
 @RequiredArgsConstructor
 public class UserPictureController {
 

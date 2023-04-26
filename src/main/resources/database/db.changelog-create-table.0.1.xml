@@ -16,7 +16,16 @@
             <column name="email" type="VARCHAR(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="password" type="VARCHAR(35)">
+            <column name="firstname" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="lastname" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(35)">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
@@ -187,6 +196,30 @@
             <column name="status" type="INT">
                 <constraints nullable="false"/>
             </column>
+            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2023-04-24-008" author="Andrei Dodu" dbms="${dbms}">
+        <createTable tableName="${tablePrefix}token">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_token"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_user_token"
+                             references="${tablePrefix}user(id)"/>
+            </column>
+            <column name="token" type="VARCHAR(160)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_type" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revoked" type="BOOLEAN" />
+            <column name="expired" type="BOOLEAN" />
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="version" type="INT"/>

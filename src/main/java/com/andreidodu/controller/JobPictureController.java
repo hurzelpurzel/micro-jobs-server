@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/jobPicture")
+@RequestMapping(value = "/api/v1/jobPicture")
 @RequiredArgsConstructor
 public class JobPictureController {
 

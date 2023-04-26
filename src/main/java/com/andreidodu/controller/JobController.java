@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/job")
+@RequestMapping(value = "/api/v1/job")
 @RequiredArgsConstructor
 public class JobController {
 

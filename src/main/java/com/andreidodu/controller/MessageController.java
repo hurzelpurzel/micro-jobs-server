@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/message")
+@RequestMapping(value = "/api/v1/message")
 @RequiredArgsConstructor
 public class MessageController {
 
