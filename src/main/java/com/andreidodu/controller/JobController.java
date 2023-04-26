@@ -46,9 +46,9 @@ public class JobController {
     }
 
     @PostMapping
-    public ResponseEntity<JobDTO> save(@RequestBody JobDTO jobDTO) {
+    public ResponseEntity<JobDTO> save(@RequestBody JobDTO jobDTO) throws ApplicationException {
         jobDTO.setStatus(0);
-        return ResponseEntity.ok(this.jobService.save(jobDTO));
+        return ResponseEntity.ok(this.jobService.save(jobDTO, 1l));
     }
 
     @PutMapping("/{id}")

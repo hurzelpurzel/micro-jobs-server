@@ -70,6 +70,10 @@
             <column name="status" type="INT">
                 <constraints nullable="false"/>
             </column>
+            <column name="user_publisher_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_publisher_job"
+                             references="${tablePrefix}user(id)"/>
+            </column>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="version" type="INT"/>

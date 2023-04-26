@@ -4,8 +4,10 @@ import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.model.Job;
+import com.andreidodu.model.User;
 import com.andreidodu.repository.JobPageableRepository;
 import com.andreidodu.repository.JobRepository;
+import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
+    private final UserRepository userRepository;
     private final JobPageableRepository jobPageableRepository;
 
     private final JobMapper jobMapper;
@@ -46,8 +49,14 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobDTO save(JobDTO jobDTO) {
-        final Job user = this.jobRepository.save(this.jobMapper.toModel(jobDTO));
+    public JobDTO save(JobDTO jobDTO, Long userId) throws ApplicationException {
+        Job model = this.jobMapper.toModel(jobDTO);
+        Optional<User> userOpt = this.userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            throw new ApplicationException("User not found");
+        }
+        model.setPublisher(userOpt.get());
+        final Job user = this.jobRepository.save(model);
         return this.jobMapper.toDTO(user);
     }
 

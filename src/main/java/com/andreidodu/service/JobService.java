@@ -12,7 +12,7 @@ public interface JobService {
 
     void delete(Long id);
 
-    JobDTO save(JobDTO jobDTO);
+    JobDTO save(JobDTO jobDTO, Long userId) throws ApplicationException;
 
     JobDTO update(Long id, JobDTO jobDTO) throws ApplicationException;
 

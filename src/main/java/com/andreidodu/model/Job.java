@@ -24,6 +24,10 @@ public class Job extends ModelCommon {
     @Column(name = "type", nullable = false)
     private Integer type;
 
+    @ManyToOne
+    @JoinColumn(name = "user_publisher_id", nullable = false)
+    private User publisher;
+
     @Column(name = "status", nullable = false)
     private Integer status;
 
@@ -87,6 +91,14 @@ public class Job extends ModelCommon {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public User getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(User publisher) {
+        this.publisher = publisher;
     }
 
     @Override

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "mj_user")
 @EntityListeners(AuditingEntityListener.class)
@@ -34,6 +36,9 @@ public class User extends ModelCommon {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserPicture userPicture;
+
+    @OneToMany(mappedBy = "publisher")
+    private Set<Job> jobs;
 
 
     public Long getId() {
