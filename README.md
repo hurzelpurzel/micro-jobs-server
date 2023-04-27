@@ -15,6 +15,7 @@ Micro Jobs is a small platform that allows users to offer or to request services
 
 # Features
 - user login (JWT)
+- user logout
 - user registration
 - refresh token
 - view offers
