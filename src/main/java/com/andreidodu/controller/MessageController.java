@@ -2,7 +2,6 @@ package com.andreidodu.controller;
 
 import com.andreidodu.dto.MessageDTO;
 import com.andreidodu.exception.ApplicationException;
-import com.andreidodu.service.JobService;
 import com.andreidodu.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -3,7 +3,6 @@ package com.andreidodu.controller;
 import com.andreidodu.dto.JobInstanceDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.JobInstanceService;
-import com.andreidodu.service.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

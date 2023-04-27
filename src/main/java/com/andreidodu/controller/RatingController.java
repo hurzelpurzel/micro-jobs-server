@@ -2,7 +2,6 @@ package com.andreidodu.controller;
 
 import com.andreidodu.dto.RatingDTO;
 import com.andreidodu.exception.ApplicationException;
-import com.andreidodu.service.JobInstanceService;
 import com.andreidodu.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

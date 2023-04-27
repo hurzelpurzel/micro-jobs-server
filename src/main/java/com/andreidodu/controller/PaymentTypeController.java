@@ -2,7 +2,6 @@ package com.andreidodu.controller;
 
 import com.andreidodu.dto.PaymentTypeDTO;
 import com.andreidodu.exception.ApplicationException;
-import com.andreidodu.service.JobService;
 import com.andreidodu.service.PaymentTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
