@@ -28,8 +28,11 @@ public class JwtService {
     private long refreshExpiration;
 
     public String extractUsername(String token) {
-        System.out.println("[" + token + "]");
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractUsernameFromAuthorizzation(final String authorization) {
+        return extractUsername(authorization.substring(7));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
