@@ -5,7 +5,6 @@ package com.andreidodu.service.security;
 import com.andreidodu.dto.AuthenticationRequestDTO;
 import com.andreidodu.dto.AuthenticationResponseDTO;
 import com.andreidodu.dto.RegisterRequestDTO;
-import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.model.Role;
 import com.andreidodu.model.User;
 import com.andreidodu.model.Token;
@@ -24,11 +23,11 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationServiceImpl {
     private final UserRepository repository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtServiceImpl;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponseDTO register(RegisterRequestDTO request) {
@@ -44,8 +43,8 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        var jwtToken = jwtServiceImpl.generateToken(user);
+        var refreshToken = jwtServiceImpl.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponseDTO.builder()
                 .accessToken(jwtToken)
@@ -63,8 +62,8 @@ public class AuthenticationService {
 
         var user = repository.findByUsername(request.getUsername())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        var jwtToken = jwtServiceImpl.generateToken(user);
+        var refreshToken = jwtServiceImpl.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
         return AuthenticationResponseDTO.builder()
@@ -106,12 +105,12 @@ public class AuthenticationService {
             return new AuthenticationResponseDTO();
         }
         refreshToken = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(refreshToken);
+        userEmail = jwtServiceImpl.extractUsername(refreshToken);
         if (userEmail != null) {
             var user = this.repository.findByUsername(userEmail)
                     .orElseThrow();
-            if (jwtService.isTokenValid(refreshToken, user)) {
-                var accessToken = jwtService.generateToken(user);
+            if (jwtServiceImpl.isTokenValid(refreshToken, user)) {
+                var accessToken = jwtServiceImpl.generateToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
                 var authResponse = AuthenticationResponseDTO.builder()

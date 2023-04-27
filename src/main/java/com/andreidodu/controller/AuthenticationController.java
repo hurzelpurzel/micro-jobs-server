@@ -3,8 +3,8 @@ package com.andreidodu.controller;
 import com.andreidodu.dto.AuthenticationRequestDTO;
 import com.andreidodu.dto.AuthenticationResponseDTO;
 import com.andreidodu.dto.RegisterRequestDTO;
-import com.andreidodu.service.security.AuthenticationService;
-import com.andreidodu.service.security.LogoutService;
+import com.andreidodu.service.security.AuthenticationServiceImpl;
+import com.andreidodu.service.security.LogoutServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService service;
+    private final AuthenticationServiceImpl service;
 
-    private final LogoutService logoutService;
+    private final LogoutServiceImpl logoutServiceImpl;
 
     @PostMapping("/register")
 

@@ -5,8 +5,7 @@ import com.andreidodu.dto.GenericResponse;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.JobService;
-import com.andreidodu.service.UserService;
-import com.andreidodu.service.security.JwtService;
+import com.andreidodu.service.security.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class JobController {
 
     final private JobService jobService;
 
-    final private JwtService jwtService;
+    final private JwtServiceImpl jwtServiceImpl;
 
     @GetMapping("/{id}")
     public ResponseEntity<JobDTO> get(@PathVariable Long id) throws ApplicationException {
@@ -36,12 +35,12 @@ public class JobController {
 
     @GetMapping("/myOffers/{page}")
     public ResponseEntity<List<JobDTO>> getMyOffers(@PathVariable Integer page,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(this.jwtService.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_OFFER, page));
+        return ResponseEntity.ok(this.jobService.getAll(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_OFFER, page));
     }
 
     @GetMapping("/myRequests/{page}")
     public ResponseEntity<List<JobDTO>> getMyRequests(@PathVariable Integer page,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(this.jwtService.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_REQUEST, page));
+        return ResponseEntity.ok(this.jobService.getAll(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_REQUEST, page));
     }
 
     @GetMapping("/count/requests")
@@ -56,12 +55,12 @@ public class JobController {
 
     @GetMapping("/count/myOffers")
     public ResponseEntity<GenericResponse<Long>> getCountMyOffers(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtService.extractUsernameFromAuthorizzation(authorization),JobConst.TYPE_OFFER)));
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization),JobConst.TYPE_OFFER)));
     }
 
     @GetMapping("/count/myRequests")
     public ResponseEntity<GenericResponse<Long>> getCountMyRequests(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtService.extractUsernameFromAuthorizzation(authorization),JobConst.TYPE_REQUEST)));
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization),JobConst.TYPE_REQUEST)));
     }
 
     @GetMapping("/requests/{page}")
@@ -71,7 +70,7 @@ public class JobController {
 
     @PostMapping
     public ResponseEntity<JobDTO> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody JobDTO jobDTO) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtService.extractUsernameFromAuthorizzation(authorization)));
+        return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization)));
     }
 
     @PutMapping("/{id}")
