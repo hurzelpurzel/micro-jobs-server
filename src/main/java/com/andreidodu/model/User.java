@@ -1,5 +1,6 @@
 package com.andreidodu.model;
 
+import com.andreidodu.model.common.ModelCommon;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

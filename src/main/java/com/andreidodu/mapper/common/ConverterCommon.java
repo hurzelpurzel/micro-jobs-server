@@ -1,4 +1,4 @@
-package com.andreidodu.mapper;
+package com.andreidodu.mapper.common;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.modelmapper.Converter;
