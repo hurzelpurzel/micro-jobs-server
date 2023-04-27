@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,8 @@ public class AuthenticationController {
     private final AuthenticationServiceImpl service;
 
     private final LogoutServiceImpl logoutServiceImpl;
+
+    private final LogoutServiceImpl logoutService;
 
     @PostMapping("/register")
 
@@ -46,6 +49,15 @@ public class AuthenticationController {
             HttpServletResponse response
     ) throws IOException {
         return service.refreshToken(request, response);
+    }
+
+    @PostMapping("/logout")
+    public void logout(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication
+    ) throws IOException {
+         logoutService.logout(request, response, authentication);
     }
 
 }
