@@ -20,7 +20,7 @@ Micro Jobs is a small platform that allows users to offer or to request services
 - view offers
 - view requests
 - insert request/offer
-- wip
+- ...wip
 
 # Architecture
 - ![Database](micro-jobs.png)
