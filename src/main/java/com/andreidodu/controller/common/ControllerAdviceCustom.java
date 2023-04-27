@@ -16,7 +16,7 @@ public class ControllerAdviceCustom {
     }
 
     @ExceptionHandler(PSQLException.class)
-    public ResponseEntity<ServerResultDTO> handleApplicationException(PSQLException e) {
+    public ResponseEntity<ServerResultDTO> handlePSQLException(PSQLException e) {
         return ResponseEntity.status(500).body(new ServerResultDTO(2, e.getMessage()));
     }
 
