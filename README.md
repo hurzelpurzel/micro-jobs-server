@@ -13,5 +13,14 @@ Micro Jobs is a small platform that allows users to offer or to request services
 - Gradle;
 - Git.
 
+# Features
+- user login (JWT)
+- user registration
+- refresh token
+- view offers
+- view requests
+- insert request/offer
+- ...wip
+
 # Architecture
 - ![Database](micro-jobs.png)
