@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -46,7 +47,7 @@ public class JobServiceImpl implements JobService {
         JobDTO dto = this.jobMapper.toDTO(modelOpt.get());
         dto.setImages(new ArrayList<>());
         modelOpt.get().getJobPictureSet().stream().forEach(jobPicture -> {
-            dto.getImages().add(new String(Base64.getEncoder().encode(ArrayUtils.toPrimitive(jobPicture.getPicture()))));
+            dto.getImages().add(new String(ArrayUtils.toPrimitive(jobPicture.getPicture()), StandardCharsets.UTF_8));
         });
         return dto;
     }
@@ -83,18 +84,10 @@ public class JobServiceImpl implements JobService {
 
         Optional.ofNullable(jobDTO.getImages()).orElse(new ArrayList<>()).stream()
                 .map(base64ImageFull -> {
-                    try {
-                        String base64Image = base64ImageFull.split(",")[1];
-                        JobPicture modelJobPicture = new JobPicture();
-                        modelJobPicture.setPicture(ArrayUtils.toObject(Base64
-                                .getDecoder()
-                                .decode(new String(base64Image)
-                                        .getBytes("UTF-8"))));
-                        modelJobPicture.setJob(job);
-                        return modelJobPicture;
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
+                    JobPicture modelJobPicture = new JobPicture();
+                    modelJobPicture.setPicture(ArrayUtils.toObject(base64ImageFull.getBytes(StandardCharsets.UTF_8)));
+                    modelJobPicture.setJob(job);
+                    return modelJobPicture;
                 }).forEach(modelJobPicture -> {
                     this.jobPictureRepository.save(modelJobPicture);
                 });
