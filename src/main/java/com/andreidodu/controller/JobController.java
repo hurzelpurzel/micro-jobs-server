@@ -6,7 +6,9 @@ import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.JobService;
 import com.andreidodu.service.UserService;
+import com.andreidodu.service.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,8 @@ import java.util.List;
 public class JobController {
 
     final private JobService jobService;
+
+    final private JwtService jwtService;
 
     @GetMapping("/{id}")
     public ResponseEntity<JobDTO> get(@PathVariable Long id) throws ApplicationException {
@@ -46,9 +50,8 @@ public class JobController {
     }
 
     @PostMapping
-    public ResponseEntity<JobDTO> save(@RequestBody JobDTO jobDTO) throws ApplicationException {
-        jobDTO.setStatus(0);
-        return ResponseEntity.ok(this.jobService.save(jobDTO, 1l));
+    public ResponseEntity<JobDTO> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody JobDTO jobDTO) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtService.extractUsername(authorization)));
     }
 
     @PutMapping("/{id}")

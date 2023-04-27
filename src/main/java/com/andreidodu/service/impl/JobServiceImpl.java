@@ -49,9 +49,10 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobDTO save(JobDTO jobDTO, Long userId) throws ApplicationException {
+    public JobDTO save(JobDTO jobDTO, String username) throws ApplicationException {
+        jobDTO.setStatus(0);
         Job model = this.jobMapper.toModel(jobDTO);
-        Optional<User> userOpt = this.userRepository.findById(userId);
+        Optional<User> userOpt = this.userRepository.findByUsername(username);
         if (userOpt.isEmpty()) {
             throw new ApplicationException("User not found");
         }
