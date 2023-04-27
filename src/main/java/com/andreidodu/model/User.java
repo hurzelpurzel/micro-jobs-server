@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,18 +25,23 @@ public class User extends ModelCommon implements UserDetails {
     @Column(name = "id")
     private Long id;
 
+
     @Column(name = "username", nullable = false, unique = true)
+    @Length(min = 3)
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Length(min = 6)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "firstname", nullable = false)
+    @Length(min = 3)
     private String firstname;
     @Column(name = "lastname", nullable = false)
+    @Length(min = 3)
     private String lastname;
     @Column(name = "description")
     private String description;

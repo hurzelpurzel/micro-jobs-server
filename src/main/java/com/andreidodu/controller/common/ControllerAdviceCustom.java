@@ -2,6 +2,7 @@ package com.andreidodu.controller.common;
 
 import com.andreidodu.dto.ServerResultDTO;
 import com.andreidodu.exception.ApplicationException;
+import jakarta.validation.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,5 +18,10 @@ public class ControllerAdviceCustom {
     @ExceptionHandler(PSQLException.class)
     public ResponseEntity<ServerResultDTO> handleApplicationException(PSQLException e) {
         return ResponseEntity.status(500).body(new ServerResultDTO(2, e.getMessage()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ServerResultDTO> handleConstaintViolationException(ConstraintViolationException e) {
+        return ResponseEntity.status(500).body(new ServerResultDTO(3, e.getConstraintViolations().toString()));
     }
 }
