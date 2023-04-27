@@ -34,6 +34,16 @@ public class JobController {
         return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_OFFER, page));
     }
 
+    @GetMapping("/myOffers/{page}")
+    public ResponseEntity<List<JobDTO>> getMyOffers(@PathVariable Integer page,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getAll(this.jwtService.extractUsername(authorization.substring(7)), JobConst.TYPE_OFFER, page));
+    }
+
+    @GetMapping("/myRequests/{page}")
+    public ResponseEntity<List<JobDTO>> getMyRequests(@PathVariable Integer page,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getAll(this.jwtService.extractUsername(authorization.substring(7)), JobConst.TYPE_REQUEST, page));
+    }
+
     @GetMapping("/count/requests")
     public ResponseEntity<GenericResponse<Long>> getCountRequests() throws ApplicationException {
         return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(JobConst.TYPE_REQUEST)));
@@ -42,6 +52,16 @@ public class JobController {
     @GetMapping("/count/offers")
     public ResponseEntity<GenericResponse<Long>> getCountOffers() throws ApplicationException {
         return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(JobConst.TYPE_OFFER)));
+    }
+
+    @GetMapping("/count/myOffers")
+    public ResponseEntity<GenericResponse<Long>> getCountMyOffers(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtService.extractUsername(authorization.substring(7)),JobConst.TYPE_OFFER)));
+    }
+
+    @GetMapping("/count/myRequests")
+    public ResponseEntity<GenericResponse<Long>> getCountMyRequests(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtService.extractUsername(authorization.substring(7)),JobConst.TYPE_REQUEST)));
     }
 
     @GetMapping("/requests/{page}")

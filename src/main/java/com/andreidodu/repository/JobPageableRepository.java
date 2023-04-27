@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface JobPageableRepository extends PagingAndSortingRepository<Job, Long> {
     List<Job> findByType(Integer type, Pageable pageable);
+
+    List<Job> findByTypeAndPublisher_username(int type, String username, Pageable secondPageWithFiveElements);
 }

@@ -44,6 +44,13 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public List<JobDTO> getAll(String username, int type, int page) throws ApplicationException {
+        Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
+        List<Job> models = this.jobPageableRepository.findByTypeAndPublisher_username(type, username, secondPageWithFiveElements);
+        return this.jobMapper.toListDTO(models);
+    }
+
+    @Override
     public void delete(Long id) {
         this.jobRepository.deleteById(id);
     }
@@ -80,6 +87,11 @@ public class JobServiceImpl implements JobService {
     @Override
     public long countByType(int type) {
         return this.jobRepository.countByType(type);
+    }
+
+    @Override
+    public long countByTypeAndUsername(String username, int type) {
+        return this.jobRepository.countByTypeAndPublisher_username(type, username);
     }
 
 }

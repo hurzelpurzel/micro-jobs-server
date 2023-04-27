@@ -9,6 +9,7 @@ public interface JobService {
     JobDTO get(Long id) throws ApplicationException;
 
     List<JobDTO> getAll(int type, int page) throws ApplicationException;
+    List<JobDTO> getAll(String username, int type, int page) throws ApplicationException;
 
     void delete(Long id);
 
@@ -17,4 +18,5 @@ public interface JobService {
     JobDTO update(Long id, JobDTO jobDTO) throws ApplicationException;
 
     long countByType(int type);
+    long countByTypeAndUsername(String username, int type);
 }
