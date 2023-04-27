@@ -4,6 +4,7 @@ package com.andreidodu.service.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class JwtService {
     private long refreshExpiration;
 
     public String extractUsername(String token) {
+        System.out.println("[" + token + "]");
         return extractClaim(token, Claims::getSubject);
     }
 

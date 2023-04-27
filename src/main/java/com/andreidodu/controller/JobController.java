@@ -51,7 +51,7 @@ public class JobController {
 
     @PostMapping
     public ResponseEntity<JobDTO> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody JobDTO jobDTO) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtService.extractUsername(authorization)));
+        return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtService.extractUsername(authorization.substring(7))));
     }
 
     @PutMapping("/{id}")
