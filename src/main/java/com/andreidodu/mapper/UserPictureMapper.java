@@ -1,6 +1,5 @@
 package com.andreidodu.mapper;
 
-import com.andreidodu.dto.JobPictureDTO;
 import com.andreidodu.dto.UserPictureDTO;
 import com.andreidodu.model.UserPicture;
 import jakarta.annotation.PostConstruct;

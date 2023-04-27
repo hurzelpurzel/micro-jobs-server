@@ -2,7 +2,6 @@ package com.andreidodu.mapper;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.modelmapper.Converter;
-
 import java.util.Base64;
 import java.util.Optional;
 

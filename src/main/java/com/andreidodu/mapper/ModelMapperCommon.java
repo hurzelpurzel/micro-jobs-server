@@ -3,7 +3,6 @@ package com.andreidodu.mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;

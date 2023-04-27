@@ -1,10 +1,7 @@
 package com.andreidodu.mapper;
 
 import com.andreidodu.dto.JobDTO;
-import com.andreidodu.dto.UserDTO;
 import com.andreidodu.model.Job;
-import com.andreidodu.model.User;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 @Component
