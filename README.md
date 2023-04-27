@@ -4,7 +4,7 @@ Micro Jobs is a small platform that allows users to offer or to request services
 
 # Technologies
 - Java;
-- Spring Boot;
+- Spring Boot (... +Spring Security);
 - ModelMapper;
 - Hibernate;
 - Spring JPA;
@@ -21,6 +21,7 @@ Micro Jobs is a small platform that allows users to offer or to request services
 - view offers
 - view requests
 - insert request/offer
+- picture upload
 - ...wip
 
 # Architecture
