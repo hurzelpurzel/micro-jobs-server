@@ -1,19 +1,26 @@
 package com.andreidodu.service.impl;
 
 import com.andreidodu.dto.JobDTO;
+import com.andreidodu.dto.JobPictureDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.model.Job;
+import com.andreidodu.model.JobPicture;
 import com.andreidodu.model.User;
 import com.andreidodu.repository.JobPageableRepository;
+import com.andreidodu.repository.JobPictureRepository;
 import com.andreidodu.repository.JobRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.JobService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +31,7 @@ public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final JobPageableRepository jobPageableRepository;
-
+    private final JobPictureRepository jobPictureRepository;
     private final JobMapper jobMapper;
 
     @Override
@@ -64,8 +71,28 @@ public class JobServiceImpl implements JobService {
             throw new ApplicationException("User not found");
         }
         model.setPublisher(userOpt.get());
-        final Job user = this.jobRepository.save(model);
-        return this.jobMapper.toDTO(user);
+        final Job job = this.jobRepository.save(model);
+
+        Optional.ofNullable(jobDTO.getImages()).orElse(new ArrayList<>()).stream()
+                .map(base64ImageFull -> {
+                    try {
+                        String base64Image = base64ImageFull.split(",")[1];
+                        JobPicture modelJobPicture = new JobPicture();
+                        modelJobPicture.setPicture(ArrayUtils.toObject(Base64
+                                .getDecoder()
+                                .decode(new String(base64Image)
+                                        .getBytes("UTF-8"))));
+                        modelJobPicture.setJob(job);
+                        return modelJobPicture;
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).forEach(modelJobPicture -> {
+                    this.jobPictureRepository.save(modelJobPicture);
+                });
+
+
+        return this.jobMapper.toDTO(job);
     }
 
     @Override

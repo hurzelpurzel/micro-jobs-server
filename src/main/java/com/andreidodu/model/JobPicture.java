@@ -1,6 +1,7 @@
 package com.andreidodu.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Arrays;
