@@ -8,6 +8,7 @@ import com.andreidodu.model.User;
 import com.andreidodu.repository.PaymentTypeRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.PaymentTypeService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class PaymentTypeServiceImpl implements PaymentTypeService {
 
     private final PaymentTypeRepository paymentTypeRepository;

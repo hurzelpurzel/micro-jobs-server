@@ -8,6 +8,7 @@ import com.andreidodu.model.User;
 import com.andreidodu.repository.MessageRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.MessageService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;

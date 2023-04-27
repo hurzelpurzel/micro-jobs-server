@@ -13,6 +13,7 @@ import com.andreidodu.repository.TokenRepository;
 import com.andreidodu.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class AuthenticationServiceImpl {
     private final UserRepository repository;
     private final TokenRepository tokenRepository;

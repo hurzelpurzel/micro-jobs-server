@@ -8,6 +8,7 @@ import com.andreidodu.model.UserPicture;
 import com.andreidodu.repository.UserPictureRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.UserPictureService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class UserPictureServiceImpl implements UserPictureService {
 
     private final UserPictureRepository userPictureRepository;

@@ -8,6 +8,7 @@ import com.andreidodu.model.JobPicture;
 import com.andreidodu.repository.JobPictureRepository;
 import com.andreidodu.repository.JobRepository;
 import com.andreidodu.service.JobPictureService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class JobPictureServiceImpl implements JobPictureService {
 
     private final JobPictureRepository jobPictureRepository;

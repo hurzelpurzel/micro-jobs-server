@@ -11,6 +11,7 @@ import com.andreidodu.repository.JobInstanceRepository;
 import com.andreidodu.repository.RatingRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.RatingService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class RatingServiceImpl implements RatingService {
 
     private final RatingRepository ratingRepository;

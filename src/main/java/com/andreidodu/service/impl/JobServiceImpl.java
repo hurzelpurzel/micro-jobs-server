@@ -12,6 +12,7 @@ import com.andreidodu.repository.JobPictureRepository;
 import com.andreidodu.repository.JobRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.JobService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
@@ -40,7 +42,13 @@ public class JobServiceImpl implements JobService {
         if (modelOpt.isEmpty()) {
             throw new ApplicationException("Job not found");
         }
-        return this.jobMapper.toDTO(modelOpt.get());
+
+        JobDTO dto = this.jobMapper.toDTO(modelOpt.get());
+        dto.setImages(new ArrayList<>());
+        modelOpt.get().getJobPictureSet().stream().forEach(jobPicture -> {
+            dto.getImages().add(new String(Base64.getEncoder().encode(ArrayUtils.toPrimitive(jobPicture.getPicture()))));
+        });
+        return dto;
     }
 
     @Override
@@ -90,8 +98,6 @@ public class JobServiceImpl implements JobService {
                 }).forEach(modelJobPicture -> {
                     this.jobPictureRepository.save(modelJobPicture);
                 });
-
-
         return this.jobMapper.toDTO(job);
     }
 
