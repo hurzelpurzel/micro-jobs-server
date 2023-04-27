@@ -1,7 +1,7 @@
 package com.andreidodu.service.impl;
 
+import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.JobDTO;
-import com.andreidodu.dto.JobPictureDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.model.Job;
@@ -72,7 +72,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO save(JobDTO jobDTO, String username) throws ApplicationException {
-        jobDTO.setStatus(0);
+        jobDTO.setStatus(JobConst.STATUS_CREATED);
         Job model = this.jobMapper.toModel(jobDTO);
         Optional<User> userOpt = this.userRepository.findByUsername(username);
         if (userOpt.isEmpty()) {
@@ -99,6 +99,22 @@ public class JobServiceImpl implements JobService {
                     this.jobPictureRepository.save(modelJobPicture);
                 });
         return this.jobMapper.toDTO(job);
+    }
+
+
+    @Override
+    public JobDTO approveJob(Long jobId, String owner) throws ApplicationException {
+        Optional<User> userOpt = this.userRepository.findByUsername(owner);
+        if (userOpt.isEmpty()) {
+            throw new ApplicationException("User not found");
+        }
+        Optional<Job> modelOpt = this.jobRepository.findById(jobId);
+        if (modelOpt.isEmpty()) {
+            throw new ApplicationException("Job not found");
+        }
+        modelOpt.get().setStatus(JobConst.STATUS_PUBLISHED);
+        Job model = this.jobRepository.save(modelOpt.get());
+        return this.jobMapper.toDTO(model);
     }
 
     @Override
