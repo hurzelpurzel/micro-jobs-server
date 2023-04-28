@@ -4,6 +4,7 @@ import com.andreidodu.model.common.ModelCommon;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -31,6 +32,9 @@ public class Job extends ModelCommon {
 
     @Column(name = "status", nullable = false)
     private Integer status;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
 
     @OneToMany(mappedBy = "job")
     private Set<JobInstance> jobInstanceSet;
@@ -100,6 +104,14 @@ public class Job extends ModelCommon {
 
     public void setPublisher(User publisher) {
         this.publisher = publisher;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override

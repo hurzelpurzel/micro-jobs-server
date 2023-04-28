@@ -1,9 +1,11 @@
 package com.andreidodu.dto;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -16,6 +18,8 @@ public class JobDTO extends DTOCommon {
     private Integer type;
     private Integer status;
     private List<String> images;
+    private Double price;
+    private AuthorDTO author = new AuthorDTO();
 
 
 }

@@ -29,6 +29,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
+            <column name="rating" type="double"/>
             <column name="status" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -83,6 +84,7 @@
                 <constraints nullable="false" foreignKeyName="fk_publisher_job"
                              references="${tablePrefix}user(id)"/>
             </column>
+            <column name="price" type="double"/>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="version" type="INT"/>

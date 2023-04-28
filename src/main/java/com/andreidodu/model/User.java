@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -46,7 +47,8 @@ public class User extends ModelCommon implements UserDetails {
     private String lastname;
     @Column(name = "description")
     private String description;
-
+    @Column(name = "rating")
+    private Double rating;
     @Column(name = "status", nullable = false)
     private Integer status;
 
@@ -61,6 +63,18 @@ public class User extends ModelCommon implements UserDetails {
 
     @OneToMany(mappedBy = "publisher")
     private Set<Job> jobs;
+
+    @OneToMany(mappedBy = "userVoter")
+    private Set<Rating> ratingsMade;
+
+    @OneToMany(mappedBy = "userTarget")
+    private Set<Rating> ratingsRecevied;
+
+    @OneToMany(mappedBy = "userTo")
+    private Set<Message> messagesReceived;
+
+    @OneToMany(mappedBy = "userFrom")
+    private Set<Message> messagesSent;
 
 
     public Long getId() {
@@ -183,6 +197,46 @@ public class User extends ModelCommon implements UserDetails {
 
     public void setJobs(Set<Job> jobs) {
         this.jobs = jobs;
+    }
+
+    public Set<Rating> getRatingsMade() {
+        return ratingsMade;
+    }
+
+    public void setRatingsMade(Set<Rating> ratingsMade) {
+        this.ratingsMade = ratingsMade;
+    }
+
+    public Set<Rating> getRatingsRecevied() {
+        return ratingsRecevied;
+    }
+
+    public void setRatingsRecevied(Set<Rating> ratingsRecevied) {
+        this.ratingsRecevied = ratingsRecevied;
+    }
+
+    public Set<Message> getMessagesReceived() {
+        return messagesReceived;
+    }
+
+    public void setMessagesReceived(Set<Message> messagesReceived) {
+        this.messagesReceived = messagesReceived;
+    }
+
+    public Set<Message> getMessagesSent() {
+        return messagesSent;
+    }
+
+    public void setMessagesSent(Set<Message> messagesSent) {
+        this.messagesSent = messagesSent;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     @Override

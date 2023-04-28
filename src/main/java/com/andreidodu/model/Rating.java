@@ -15,12 +15,13 @@ public class Rating extends ModelCommon {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "user_voter_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_voter_id", nullable = false)
     private User userVoter;
 
-    @OneToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "user_target_id", referencedColumnName = "id", nullable = false)
+
+    @ManyToOne
+    @JoinColumn(name = "user_target_id", nullable = false)
     private User userTarget;
 
     @Column(name = "rating", nullable = false)

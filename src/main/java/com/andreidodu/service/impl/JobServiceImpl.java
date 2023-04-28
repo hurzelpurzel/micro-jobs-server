@@ -12,19 +12,15 @@ import com.andreidodu.repository.JobPictureRepository;
 import com.andreidodu.repository.JobRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.JobService;
+import com.andreidodu.validators.JobDTOValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,13 +50,22 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<JobDTO> getAll(int type, int page) throws ApplicationException {
+        JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
         List<Job> models = this.jobPageableRepository.findByType(type, secondPageWithFiveElements);
-        return this.jobMapper.toListDTO(models);
+        return  this.jobMapper.toListDTO(models);
+//        models.forEach(model -> {
+//            Set<Rating> ratingsReceived = model.getPublisher().getRatingsRecevied();
+//            int sumOfRatings = ratingsReceived.stream()
+//                    .map(rating -> rating.getRating())
+//                    .reduce(0, (a, b) -> a + b);
+//            int result = sumOfRatings / ratingsReceived.size();
+//        });
     }
 
     @Override
     public List<JobDTO> getAll(String username, int type, int page) throws ApplicationException {
+        JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
         List<Job> models = this.jobPageableRepository.findByTypeAndPublisher_username(type, username, secondPageWithFiveElements);
         return this.jobMapper.toListDTO(models);

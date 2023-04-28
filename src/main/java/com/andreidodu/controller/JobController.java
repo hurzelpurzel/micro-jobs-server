@@ -1,6 +1,5 @@
 package com.andreidodu.controller;
 
-import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.GenericResponse;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
@@ -32,44 +31,25 @@ public class JobController {
         return ResponseEntity.ok(this.jobService.approveJob(id, jwtServiceImpl.extractUsername(authorization)));
     }
 
-    @GetMapping("/offers/{page}")
-    public ResponseEntity<List<JobDTO>> getAllOffers(@PathVariable Integer page) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_OFFER, page));
+    @GetMapping("/{jobType}/{page}")
+    public ResponseEntity<List<JobDTO>> getJobsByTypePaginated(@PathVariable Integer jobType, @PathVariable Integer page) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getAll(jobType, page));
     }
 
-    @GetMapping("/myOffers/{page}")
-    public ResponseEntity<List<JobDTO>> getMyOffers(@PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_OFFER, page));
+    @GetMapping("/mine/{jobType}/{page}")
+    public ResponseEntity<List<JobDTO>> getMyJobsByTapePaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getAll(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), jobType, page));
     }
 
-    @GetMapping("/myRequests/{page}")
-    public ResponseEntity<List<JobDTO>> getMyRequests(@PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_REQUEST, page));
+
+    @GetMapping("/count/{jobType}")
+    public ResponseEntity<GenericResponse<Long>> countAllJobsByJobType(@PathVariable Integer jobType) throws ApplicationException {
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(jobType)));
     }
 
-    @GetMapping("/count/requests")
-    public ResponseEntity<GenericResponse<Long>> getCountRequests() throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(JobConst.TYPE_REQUEST)));
-    }
-
-    @GetMapping("/count/offers")
-    public ResponseEntity<GenericResponse<Long>> getCountOffers() throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(JobConst.TYPE_OFFER)));
-    }
-
-    @GetMapping("/count/myOffers")
-    public ResponseEntity<GenericResponse<Long>> getCountMyOffers(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_OFFER)));
-    }
-
-    @GetMapping("/count/myRequests")
-    public ResponseEntity<GenericResponse<Long>> getCountMyRequests(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), JobConst.TYPE_REQUEST)));
-    }
-
-    @GetMapping("/requests/{page}")
-    public ResponseEntity<List<JobDTO>> getAllRequests(@PathVariable Integer page) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(JobConst.TYPE_REQUEST, page));
+    @GetMapping("/count/mine/{jobType}")
+    public ResponseEntity<GenericResponse<Long>> getCountMyJobs(@PathVariable Integer jobType,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), jobType)));
     }
 
     @PostMapping
