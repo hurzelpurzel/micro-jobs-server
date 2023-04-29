@@ -72,8 +72,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void delete(Long id) {
-        this.jobRepository.deleteById(id);
+    public void delete(Long id, String username) {
+        this.jobRepository.deleteByIdAndPublisher_Username(id, username);
     }
 
     @Override

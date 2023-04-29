@@ -7,4 +7,6 @@ public interface JobRepository extends CrudRepository<Job, Long> {
     long countByType(int type);
 
     long countByTypeAndPublisher_username(int type, String username);
+
+    void deleteByIdAndPublisher_Username(Long id, String username);
 }
