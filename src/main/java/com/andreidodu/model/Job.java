@@ -3,8 +3,6 @@ package com.andreidodu.model;
 import com.andreidodu.model.common.ModelCommon;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -39,7 +37,7 @@ public class Job extends ModelCommon {
     @OneToMany(mappedBy = "job")
     private Set<JobInstance> jobInstanceSet;
 
-    @OneToMany(mappedBy = "job")
+    @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
     private Set<JobPicture> jobPictureSet;
 
     public Long getId() {
