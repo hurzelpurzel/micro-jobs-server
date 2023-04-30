@@ -8,7 +8,9 @@ import org.modelmapper.Condition;
 import org.modelmapper.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Component
@@ -19,7 +21,16 @@ public class JobMapper extends ModelMapperCommon<Job, JobDTO> {
     }
 
     Condition<List<JobPicture>, String> notNull = ctx -> ctx.getSource() != null;
-    Converter<List<JobPicture>, String> converter  = ctx -> new String(ctx.getSource().iterator().next().getPictureName());
+    Converter<List<JobPicture>, String> converter = ctx -> {
+        var listOfPictures = Optional.ofNullable(ctx.getSource())
+                .orElse(new ArrayList<>());
+        if (!listOfPictures.isEmpty()) {
+            return listOfPictures.iterator()
+                    .next()
+                    .getPictureName();
+        }
+        return null;
+    };
 
     @PostConstruct
     public void postConstruct() {
