@@ -58,8 +58,8 @@ public class JobController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<JobDTO> update(@PathVariable Long id, @RequestBody JobDTO jobDTO) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.update(id, jobDTO));
+    public ResponseEntity<JobDTO> update(@PathVariable Long id, @RequestBody JobDTO jobDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.update(id, jobDTO, this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization)));
     }
 
     @DeleteMapping("/{id}")

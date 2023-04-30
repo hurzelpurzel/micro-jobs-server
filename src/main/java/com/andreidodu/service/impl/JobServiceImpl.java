@@ -19,6 +19,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -53,7 +54,7 @@ public class JobServiceImpl implements JobService {
         JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
         List<Job> models = this.jobPageableRepository.findByType(type, secondPageWithFiveElements);
-        return  this.jobMapper.toListDTO(models);
+        return this.jobMapper.toListDTO(models);
 //        models.forEach(model -> {
 //            Set<Rating> ratingsReceived = model.getPublisher().getRatingsRecevied();
 //            int sumOfRatings = ratingsReceived.stream()
@@ -116,7 +117,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobDTO update(Long id, JobDTO jobDTO) throws ApplicationException {
+    public JobDTO update(Long id, JobDTO jobDTO, String owner) throws ApplicationException {
         if (!id.equals(jobDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
@@ -125,6 +126,9 @@ public class JobServiceImpl implements JobService {
             throw new ApplicationException("job not found");
         }
         Job user = userOpt.get();
+        if (!user.getPublisher().getUsername().equals(owner)) {
+            throw new ApplicationException("wrong user");
+        }
         this.jobMapper.getModelMapper().map(jobDTO, user);
         Job userSaved = this.jobRepository.save(user);
         return this.jobMapper.toDTO(userSaved);

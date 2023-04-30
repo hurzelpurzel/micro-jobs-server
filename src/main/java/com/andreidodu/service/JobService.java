@@ -17,7 +17,7 @@ public interface JobService {
 
     JobDTO approveJob(Long jobId, String owner) throws ApplicationException;
 
-    JobDTO update(Long id, JobDTO jobDTO) throws ApplicationException;
+    JobDTO update(Long id, JobDTO jobDTO, String owner) throws ApplicationException;
 
     long countByType(int type);
     long countByTypeAndUsername(String username, int type);
