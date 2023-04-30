@@ -17,10 +17,11 @@ public class JobDTO extends DTOCommon {
     private String description;
     private Integer type;
     private Integer status;
-    private List<String> images;
+    private List<String> imagesContent;
     private Double price;
     private AuthorDTO author = new AuthorDTO();
     private String pictureName;
+    private List<String> pictureNamesList;
 
 
 }

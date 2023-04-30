@@ -49,9 +49,9 @@ public class JobServiceImpl implements JobService {
         }
 
         JobDTO dto = this.jobMapper.toDTO(modelOpt.get());
-        dto.setImages(new ArrayList<>());
+        dto.setPictureNamesList(new ArrayList<>());
         modelOpt.get().getJobPictureList().stream().forEach(jobPicture -> {
-            dto.getImages().add(new String(jobPicture.getPictureName()));
+            dto.getPictureNamesList().add(new String(jobPicture.getPictureName()));
         });
         return dto;
     }
@@ -89,7 +89,7 @@ public class JobServiceImpl implements JobService {
         model.setPublisher(userOpt.get());
         final Job job = this.jobRepository.save(model);
 
-        Optional.ofNullable(jobDTO.getImages()).orElse(new ArrayList<>()).stream()
+        Optional.ofNullable(jobDTO.getImagesContent()).orElse(new ArrayList<>()).stream()
                 .map(base64ImageFull -> {
                     String fullFileName;
                     try {
