@@ -1,4 +1,4 @@
-package com.andreidodu.config;
+package com.andreidodu.filter;
 
 import com.andreidodu.repository.TokenRepository;
 import com.andreidodu.service.JwtService;

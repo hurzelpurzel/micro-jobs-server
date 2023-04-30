@@ -1,10 +1,10 @@
 package com.andreidodu.config;
 
 
+import com.andreidodu.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,14 +31,12 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 // job pictures should be public
-                .requestMatchers("/api/v1/jobPicture/files/**")
-                .permitAll()
-                .requestMatchers("/api/v1/auth/**")
-                .permitAll()
-                .requestMatchers("/api/v1/job/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
+                .requestMatchers("/api/v1/jobPicture/files/**").permitAll()
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/job/1/**").permitAll()
+                .requestMatchers("/api/v1/job/0/**").permitAll()
+                .requestMatchers("/api/v1/job/count/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
