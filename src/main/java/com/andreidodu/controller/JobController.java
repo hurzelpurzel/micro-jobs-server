@@ -31,20 +31,9 @@ public class JobController {
         return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsername(authorization)));
     }
 
-    @GetMapping("/{jobType}/{page}")
-    public ResponseEntity<List<JobDTO>> getJobsByTypePaginated(@PathVariable Integer jobType, @PathVariable Integer page) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(jobType, page));
-    }
-
     @GetMapping("/mine/{jobType}/{page}")
     public ResponseEntity<List<JobDTO>> getMyJobsByTapePaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.getAll(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType, page));
-    }
-
-
-    @GetMapping("/count/{jobType}")
-    public ResponseEntity<GenericResponse<Long>> countAllJobsByJobType(@PathVariable Integer jobType) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(jobType)));
     }
 
     @GetMapping("/count/mine/{jobType}")

@@ -33,9 +33,7 @@ public class SecurityConfiguration {
                 // job pictures should be public
                 .requestMatchers("/api/v1/jobPicture/files/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/job/1/**").permitAll()
-                .requestMatchers("/api/v1/job/0/**").permitAll()
-                .requestMatchers("/api/v1/job/count/**").permitAll()
+                .requestMatchers("/api/v1/job/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
