@@ -1,6 +1,7 @@
 package com.andreidodu.config;
 
 import com.andreidodu.repository.TokenRepository;
+import com.andreidodu.service.JwtService;
 import com.andreidodu.service.security.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,7 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtServiceImpl jwtServiceImpl;
+    private final JwtService jwtServiceImpl;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
 

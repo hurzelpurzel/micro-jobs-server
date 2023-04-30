@@ -8,6 +8,8 @@ import com.andreidodu.model.*;
 import com.andreidodu.repository.TokenRepository;
 import com.andreidodu.repository.UserPictureRepository;
 import com.andreidodu.repository.UserRepository;
+import com.andreidodu.service.AuthenticationService;
+import com.andreidodu.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -25,12 +27,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(Transactional.TxType.REQUIRED)
-public class AuthenticationServiceImpl {
+public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final UserPictureRepository userPictureRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtServiceImpl jwtServiceImpl;
+    private final JwtService jwtServiceImpl;
     private final AuthenticationManager authenticationManager;
     private final UserPictureMapper userPictureMapper;
 
@@ -48,7 +50,7 @@ public class AuthenticationServiceImpl {
                 .role(Role.USER)
                 .build();
         var savedUser = userRepository.save(user);
-        if (request.getPicture()!= null){
+        if (request.getPicture() != null) {
             UserPicture userPicture = new UserPicture();
             userPicture.setPicture(request.getPicture().getBytes());
             userPicture.setUser(savedUser);

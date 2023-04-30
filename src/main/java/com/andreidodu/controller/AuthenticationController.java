@@ -2,8 +2,8 @@ package com.andreidodu.controller;
 
 import com.andreidodu.dto.*;
 import com.andreidodu.exception.ApplicationException;
-import com.andreidodu.service.security.AuthenticationServiceImpl;
-import com.andreidodu.service.security.JwtServiceImpl;
+import com.andreidodu.service.AuthenticationService;
+import com.andreidodu.service.JwtService;
 import com.andreidodu.service.security.LogoutServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,13 +20,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationServiceImpl service;
+    private final AuthenticationService service;
 
     private final LogoutServiceImpl logoutServiceImpl;
 
     private final LogoutServiceImpl logoutService;
 
-    final private JwtServiceImpl jwtServiceImpl;
+    final private JwtService jwtService;
 
     @PostMapping("/register")
 
@@ -45,7 +45,7 @@ public class AuthenticationController {
 
     @GetMapping("/me")
     public ResponseEntity<UserProfileDTO> retrieveProfile(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.service.retrieveProfile(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization)));
+        return ResponseEntity.ok(this.service.retrieveProfile(this.jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
     @PostMapping("/refreshToken")

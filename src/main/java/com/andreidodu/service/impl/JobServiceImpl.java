@@ -43,8 +43,8 @@ public class JobServiceImpl implements JobService {
 
         JobDTO dto = this.jobMapper.toDTO(modelOpt.get());
         dto.setImages(new ArrayList<>());
-        modelOpt.get().getJobPictureSet().stream().forEach(jobPicture -> {
-            dto.getImages().add(new String(ArrayUtils.toPrimitive(jobPicture.getPicture()), StandardCharsets.UTF_8));
+        modelOpt.get().getJobPictureList().stream().forEach(jobPicture -> {
+            dto.getImages().add(new String(jobPicture.getPicture()));
         });
         return dto;
     }
@@ -54,7 +54,8 @@ public class JobServiceImpl implements JobService {
         JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
         List<Job> models = this.jobPageableRepository.findByType(type, secondPageWithFiveElements);
-        return this.jobMapper.toListDTO(models);
+        List<JobDTO> jobDTOList = this.jobMapper.toListDTO(models);
+        return jobDTOList;
     }
 
     @Override
@@ -84,7 +85,7 @@ public class JobServiceImpl implements JobService {
         Optional.ofNullable(jobDTO.getImages()).orElse(new ArrayList<>()).stream()
                 .map(base64ImageFull -> {
                     JobPicture modelJobPicture = new JobPicture();
-                    modelJobPicture.setPicture(ArrayUtils.toObject(base64ImageFull.getBytes(StandardCharsets.UTF_8)));
+                    modelJobPicture.setPicture(base64ImageFull.getBytes(StandardCharsets.UTF_8));
                     modelJobPicture.setJob(job);
                     return modelJobPicture;
                 }).forEach(modelJobPicture -> {

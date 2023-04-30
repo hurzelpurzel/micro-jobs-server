@@ -3,6 +3,9 @@ package com.andreidodu.model;
 import com.andreidodu.model.common.ModelCommon;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,7 +41,7 @@ public class Job extends ModelCommon {
     private Set<JobInstance> jobInstanceSet;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
-    private Set<JobPicture> jobPictureSet;
+    private List<JobPicture> jobPictureList;
 
     public Long getId() {
         return id;
@@ -80,12 +83,12 @@ public class Job extends ModelCommon {
         this.jobInstanceSet = jobInstanceSet;
     }
 
-    public Set<JobPicture> getJobPictureSet() {
-        return jobPictureSet;
+    public List<JobPicture> getJobPictureList() {
+        return jobPictureList;
     }
 
-    public void setJobPictureSet(Set<JobPicture> jobPictureSet) {
-        this.jobPictureSet = jobPictureSet;
+    public void setJobPictureList(List<JobPicture> jobPictureList) {
+        this.jobPictureList = jobPictureList;
     }
 
     public Integer getStatus() {
@@ -120,7 +123,7 @@ public class Job extends ModelCommon {
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
                 ", jobInstanceSet=" + jobInstanceSet.size() +
-                ", jobPictureSet=" + jobPictureSet.size() +
+                ", jobPictureSet=" + jobPictureList.size() +
                 '}';
     }
 }

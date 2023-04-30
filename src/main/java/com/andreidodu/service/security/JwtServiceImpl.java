@@ -1,6 +1,7 @@
 package com.andreidodu.service.security;
 
 
+import com.andreidodu.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,7 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JwtServiceImpl {
+public class JwtServiceImpl implements JwtService {
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;

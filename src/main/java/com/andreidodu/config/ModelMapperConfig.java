@@ -1,5 +1,6 @@
 package com.andreidodu.config;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ public class ModelMapperConfig {
                 .setAmbiguityIgnored(true)
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
+                .setPropertyCondition(Conditions.isNotNull())
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper;
