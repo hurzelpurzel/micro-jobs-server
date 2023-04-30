@@ -15,15 +15,12 @@ import com.andreidodu.service.JobService;
 import com.andreidodu.validators.JobDTOValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -94,17 +91,12 @@ public class JobServiceImpl implements JobService {
                     String fullFileName;
                     try {
                         Files.createDirectories(Paths.get("./files"));
-
                         var data = base64ImageFull.substring(base64ImageFull.indexOf(",") + 1).getBytes("UTF-8");
                         byte[] decoded = Base64.getDecoder().decode(data);
                         byte[] hash = MessageDigest.getInstance("MD5").digest(data);
                         String fileName = new BigInteger(1, hash).toString(16);
-
-
                         String fileType = base64ImageFull.substring("data:image/".length(), base64ImageFull.indexOf(";base64"));
-
                         fullFileName = fileName + "." + fileType;
-
                         FileOutputStream outputStream = new FileOutputStream("./files/" + fullFileName);
                         outputStream.write(decoded);
                         outputStream.close();
@@ -121,13 +113,6 @@ public class JobServiceImpl implements JobService {
                     this.jobPictureRepository.save(modelJobPicture);
                 });
         return this.jobMapper.toDTO(job);
-    }
-
-
-    public Optional<String> getExtensionByStringHandling(String filename) {
-        return Optional.ofNullable(filename)
-                .filter(f -> f.contains("."))
-                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
 
     @Override
