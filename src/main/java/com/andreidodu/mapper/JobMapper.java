@@ -1,19 +1,14 @@
 package com.andreidodu.mapper;
 
 import com.andreidodu.dto.JobDTO;
-import com.andreidodu.dto.JobPictureDTO;
 import com.andreidodu.model.Job;
 import com.andreidodu.model.JobPicture;
 import jakarta.annotation.PostConstruct;
 import org.modelmapper.Condition;
 import org.modelmapper.Converter;
-import org.modelmapper.Provider;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Component
