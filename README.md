@@ -24,6 +24,6 @@ Micro Jobs is a small platform that allows users to offer or to request services
 - ...wip
 
 # Architecture
-- ![Database](micro-jobs.png)
+![Database](micro-jobs.png)
 
 If you want to get some information, feel free to [contact me](http://andre-i.eu/#contactme).
