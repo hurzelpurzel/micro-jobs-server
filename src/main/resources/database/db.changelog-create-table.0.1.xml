@@ -100,7 +100,7 @@
                 <constraints nullable="false" foreignKeyName="fk_job_job_picture"
                              references="${tablePrefix}job(id)"/>
             </column>
-            <column name="picture" type="bytea"/>
+            <column name="picture_name" type="VARCHAR"/>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="version" type="INT"/>

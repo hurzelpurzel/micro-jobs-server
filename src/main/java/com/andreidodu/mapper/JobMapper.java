@@ -19,7 +19,7 @@ public class JobMapper extends ModelMapperCommon<Job, JobDTO> {
     }
 
     Condition<List<JobPicture>, String> notNull = ctx -> ctx.getSource() != null;
-    Converter<List<JobPicture>, String> converter  = ctx -> new String(ctx.getSource().iterator().next().getPicture());
+    Converter<List<JobPicture>, String> converter  = ctx -> new String(ctx.getSource().iterator().next().getPictureName());
 
     @PostConstruct
     public void postConstruct() {
@@ -29,7 +29,7 @@ public class JobMapper extends ModelMapperCommon<Job, JobDTO> {
             mapper.<String>map(src -> src.getPublisher().getLastname(), (destination, value) -> destination.getAuthor().setLastname(value));
             mapper.<String>map(src -> src.getPublisher().getUsername(), (destination, value) -> destination.getAuthor().setUsername(value));
             mapper.<Integer>map(src -> src.getPublisher().getRating(), (destination, value) -> destination.getAuthor().setStars(value));
-            mapper.when(notNull).using(converter).<String>map(src -> src.getJobPictureList(), JobDTO::setPicture);
+            mapper.when(notNull).using(converter).<String>map(src -> src.getJobPictureList(), JobDTO::setPictureName);
         });
     }
 

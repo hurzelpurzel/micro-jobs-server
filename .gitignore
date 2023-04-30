@@ -15,6 +15,7 @@ build/
 *.iws
 *.iml
 *.ipr
+/files
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/

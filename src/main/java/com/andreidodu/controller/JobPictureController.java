@@ -4,8 +4,15 @@ import com.andreidodu.dto.JobPictureDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.JobPictureService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping(value = "/api/v1/jobPicture")
@@ -13,6 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class JobPictureController {
 
     final private JobPictureService jobPictureService;
+
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException {
+        Resource resource = new ByteArrayResource(Files.readAllBytes(Paths.get("./files/" + filename)));
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filename+ "\"").body(resource);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<JobPictureDTO> get(@PathVariable Long id) throws ApplicationException {

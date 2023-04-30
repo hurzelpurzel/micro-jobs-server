@@ -9,5 +9,5 @@ public class JobPictureDTO extends DTOCommon {
 
     private Long id;
     private Long jobId;
-    private String picture;
+    private String pictureName;
 }

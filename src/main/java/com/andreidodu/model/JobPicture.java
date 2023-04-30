@@ -16,8 +16,8 @@ public class JobPicture extends ModelCommon {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "picture", nullable = false)
-    private byte[] picture;
+    @Column(name = "picture_name", nullable = false)
+    private String pictureName;
 
     @ManyToOne
     @JoinColumn(name = "job_id", nullable = false)
@@ -31,12 +31,12 @@ public class JobPicture extends ModelCommon {
         this.id = id;
     }
 
-    public byte[] getPicture() {
-        return picture;
+    public String getPictureName() {
+        return pictureName;
     }
 
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
     }
 
     public Job getJob() {
@@ -52,7 +52,7 @@ public class JobPicture extends ModelCommon {
     public String toString() {
         return "JobPicture{" +
                 "id=" + id +
-                ", picture=" + Arrays.toString(picture) +
+                ", picture=" + pictureName +
                 ", job=" + job.getId() +
                 '}';
     }

@@ -20,7 +20,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
@@ -44,7 +51,7 @@ public class JobServiceImpl implements JobService {
         JobDTO dto = this.jobMapper.toDTO(modelOpt.get());
         dto.setImages(new ArrayList<>());
         modelOpt.get().getJobPictureList().stream().forEach(jobPicture -> {
-            dto.getImages().add(new String(jobPicture.getPicture()));
+            dto.getImages().add(new String(jobPicture.getPictureName()));
         });
         return dto;
     }
@@ -84,8 +91,30 @@ public class JobServiceImpl implements JobService {
 
         Optional.ofNullable(jobDTO.getImages()).orElse(new ArrayList<>()).stream()
                 .map(base64ImageFull -> {
+                    String fullFileName;
+                    try {
+                        Files.createDirectories(Paths.get("./files"));
+
+                        var data = base64ImageFull.substring(base64ImageFull.indexOf(",") + 1).getBytes("UTF-8");
+                        byte[] decoded = Base64.getDecoder().decode(data);
+                        byte[] hash = MessageDigest.getInstance("MD5").digest(data);
+                        String fileName = new BigInteger(1, hash).toString(16);
+
+
+                        String fileType = base64ImageFull.substring("data:image/".length(), base64ImageFull.indexOf(";base64"));
+
+                        fullFileName = fileName + "." + fileType;
+
+                        FileOutputStream outputStream = new FileOutputStream("./files/" + fullFileName);
+                        outputStream.write(decoded);
+                        outputStream.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (NoSuchAlgorithmException e) {
+                        throw new RuntimeException(e);
+                    }
                     JobPicture modelJobPicture = new JobPicture();
-                    modelJobPicture.setPicture(base64ImageFull.getBytes(StandardCharsets.UTF_8));
+                    modelJobPicture.setPictureName(fullFileName);
                     modelJobPicture.setJob(job);
                     return modelJobPicture;
                 }).forEach(modelJobPicture -> {
@@ -94,6 +123,12 @@ public class JobServiceImpl implements JobService {
         return this.jobMapper.toDTO(job);
     }
 
+
+    public Optional<String> getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+    }
 
     @Override
     public JobDTO approveJob(Long jobId, String owner) throws ApplicationException {

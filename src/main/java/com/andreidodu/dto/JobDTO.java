@@ -20,7 +20,7 @@ public class JobDTO extends DTOCommon {
     private List<String> images;
     private Double price;
     private AuthorDTO author = new AuthorDTO();
-    private String picture;
+    private String pictureName;
 
 
 }
