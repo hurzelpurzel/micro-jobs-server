@@ -1,36 +1,39 @@
 package com.andreidodu.service.security;
 
 
-
-import com.andreidodu.dto.AuthenticationRequestDTO;
-import com.andreidodu.dto.AuthenticationResponseDTO;
-import com.andreidodu.dto.RegisterRequestDTO;
-import com.andreidodu.model.Role;
-import com.andreidodu.model.User;
-import com.andreidodu.model.Token;
-import com.andreidodu.model.TokenType;
+import com.andreidodu.dto.*;
+import com.andreidodu.exception.ApplicationException;
+import com.andreidodu.mapper.UserPictureMapper;
+import com.andreidodu.model.*;
 import com.andreidodu.repository.TokenRepository;
+import com.andreidodu.repository.UserPictureRepository;
 import com.andreidodu.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(Transactional.TxType.REQUIRED)
 public class AuthenticationServiceImpl {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final UserPictureRepository userPictureRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtServiceImpl jwtServiceImpl;
     private final AuthenticationManager authenticationManager;
+    private final UserPictureMapper userPictureMapper;
+
 
     public AuthenticationResponseDTO register(RegisterRequestDTO request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -44,7 +47,13 @@ public class AuthenticationServiceImpl {
                 .password(encodedPassword)
                 .role(Role.USER)
                 .build();
-        var savedUser = repository.save(user);
+        var savedUser = userRepository.save(user);
+        if (request.getPicture()!= null){
+            UserPicture userPicture = new UserPicture();
+            userPicture.setPicture(request.getPicture().getBytes());
+            userPicture.setUser(savedUser);
+            this.userPictureRepository.save(userPicture);
+        }
         var jwtToken = jwtServiceImpl.generateToken(user);
         var refreshToken = jwtServiceImpl.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
@@ -62,7 +71,7 @@ public class AuthenticationServiceImpl {
                 )
         );
 
-        var user = repository.findByUsername(request.getUsername())
+        var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtServiceImpl.generateToken(user);
         var refreshToken = jwtServiceImpl.generateRefreshToken(user);
@@ -103,13 +112,13 @@ public class AuthenticationServiceImpl {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return new AuthenticationResponseDTO();
         }
         refreshToken = authHeader.substring(7);
         userEmail = jwtServiceImpl.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.repository.findByUsername(userEmail)
+            var user = this.userRepository.findByUsername(userEmail)
                     .orElseThrow();
             if (jwtServiceImpl.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtServiceImpl.generateToken(user);
@@ -123,5 +132,35 @@ public class AuthenticationServiceImpl {
             }
         }
         return new AuthenticationResponseDTO();
+    }
+
+    @Transactional
+    public UserProfileDTO retrieveProfile(String username) throws ApplicationException {
+        final Optional<User> userOpt = this.userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) {
+            throw new ApplicationException("user not found");
+        }
+        final User user = userOpt.get();
+
+        var builder = UserProfileDTO.builder()
+                .id(user.getId())
+                .description(user.getDescription())
+                .username(user.getUsername())
+                .status(user.getStatus())
+                .email(user.getEmail())
+                .stars(user.getRating())
+                .lastname(user.getLastname())
+                .firstname(user.getFirstname());
+
+        var picture = user.getUserPicture();
+        if (picture != null) {
+            UserPictureDTO userPictureDTO = new UserPictureDTO();
+            userPictureDTO.setId(picture.getId());
+            userPictureDTO.setUserId(user.getId());
+            userPictureDTO.setPicture(new String(picture.getPicture()));
+            builder.picture(userPictureDTO);
+        }
+
+        return builder.build();
     }
 }

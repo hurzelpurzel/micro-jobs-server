@@ -55,13 +55,6 @@ public class JobServiceImpl implements JobService {
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
         List<Job> models = this.jobPageableRepository.findByType(type, secondPageWithFiveElements);
         return this.jobMapper.toListDTO(models);
-//        models.forEach(model -> {
-//            Set<Rating> ratingsReceived = model.getPublisher().getRatingsRecevied();
-//            int sumOfRatings = ratingsReceived.stream()
-//                    .map(rating -> rating.getRating())
-//                    .reduce(0, (a, b) -> a + b);
-//            int result = sumOfRatings / ratingsReceived.size();
-//        });
     }
 
     @Override

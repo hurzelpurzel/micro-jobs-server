@@ -16,14 +16,14 @@ public class UserPictureMapper extends ModelMapperCommon<UserPicture, UserPictur
     @PostConstruct
     private void postConstruct() {
 
-        getModelMapper().typeMap(UserPictureDTO.class, UserPicture.class).addMappings(mapper -> {
-            mapper.using(ConverterCommon.STRING_TO_BYTES).<Byte[]>map(UserPictureDTO::getPicture, UserPicture::setPicture);
-        });
-
-        getModelMapper().typeMap(UserPicture.class, UserPictureDTO.class).addMappings(mapper -> {
-            mapper.using(ConverterCommon.BYTES_TO_STRING).<String>map(UserPicture::getPicture, UserPictureDTO::setPicture);
-            mapper.map(src -> src.getUser().getId(), UserPictureDTO::setUserId);
-        });
+//        getModelMapper().typeMap(UserPictureDTO.class, UserPicture.class).addMappings(mapper -> {
+//            mapper.using(ConverterCommon.STRING_TO_BYTES).<Byte[]>map(UserPictureDTO::getPicture, UserPicture::setPicture);
+//        });
+//
+//        getModelMapper().typeMap(UserPicture.class, UserPictureDTO.class).addMappings(mapper -> {
+//            mapper.using(ConverterCommon.BYTES_TO_STRING).<String>map(UserPicture::getPicture, UserPictureDTO::setPicture);
+//            mapper.map(src -> src.getUser().getId(), UserPictureDTO::setUserId);
+//        });
     }
 
 }

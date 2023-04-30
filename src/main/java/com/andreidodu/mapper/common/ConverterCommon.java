@@ -11,8 +11,13 @@ public abstract class ConverterCommon {
                     .map(stringImage -> Base64.getDecoder().decode(stringImage))
                     .get());
 
-    public final static Converter<Byte[], String> BYTES_TO_STRING = mappingContext ->
+    public final static Converter<Byte[], String> BYTES_TO_BASE64_STRING = mappingContext ->
             new String(Optional.ofNullable(mappingContext.getSource())
                     .map(byteArrayImage -> Base64.getEncoder().encode(ArrayUtils.toPrimitive(byteArrayImage)))
+                    .get());
+
+    public final static Converter<Byte[], String> BYTES_TO_STRING = mappingContext ->
+            new String(Optional.ofNullable(mappingContext.getSource())
+                    .map(byteArrayImage -> String.valueOf(ArrayUtils.toPrimitive(byteArrayImage)))
                     .get());
 }

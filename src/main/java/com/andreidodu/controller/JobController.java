@@ -48,7 +48,7 @@ public class JobController {
     }
 
     @GetMapping("/count/mine/{jobType}")
-    public ResponseEntity<GenericResponse<Long>> getCountMyJobs(@PathVariable Integer jobType,@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+    public ResponseEntity<GenericResponse<Long>> getCountMyJobs(@PathVariable Integer jobType, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization), jobType)));
     }
 
@@ -63,7 +63,7 @@ public class JobController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id,  @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+    public ResponseEntity<String> delete(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
         this.jobService.delete(id, this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization));
         return ResponseEntity.ok("OK");
     }

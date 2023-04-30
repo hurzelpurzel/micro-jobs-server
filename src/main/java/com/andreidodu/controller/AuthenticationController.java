@@ -1,19 +1,17 @@
 package com.andreidodu.controller;
 
-import com.andreidodu.dto.AuthenticationRequestDTO;
-import com.andreidodu.dto.AuthenticationResponseDTO;
-import com.andreidodu.dto.RegisterRequestDTO;
+import com.andreidodu.dto.*;
+import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.security.AuthenticationServiceImpl;
+import com.andreidodu.service.security.JwtServiceImpl;
 import com.andreidodu.service.security.LogoutServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -27,6 +25,8 @@ public class AuthenticationController {
     private final LogoutServiceImpl logoutServiceImpl;
 
     private final LogoutServiceImpl logoutService;
+
+    final private JwtServiceImpl jwtServiceImpl;
 
     @PostMapping("/register")
 
@@ -43,6 +43,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileDTO> retrieveProfile(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.service.retrieveProfile(this.jwtServiceImpl.extractUsernameFromAuthorizzation(authorization)));
+    }
+
     @PostMapping("/refreshToken")
     public AuthenticationResponseDTO refreshToken(
             HttpServletRequest request,
@@ -57,7 +62,7 @@ public class AuthenticationController {
             HttpServletResponse response,
             Authentication authentication
     ) throws IOException {
-         logoutService.logout(request, response, authentication);
+        logoutService.logout(request, response, authentication);
     }
 
 }

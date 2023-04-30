@@ -2,6 +2,8 @@ package com.andreidodu.model;
 
 import com.andreidodu.model.common.ModelCommon;
 import jakarta.persistence.*;
+import lombok.Builder;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Arrays;
@@ -16,9 +18,9 @@ public class UserPicture extends ModelCommon {
     @Column(name = "id")
     private Long id;
 
-    @Lob
+
     @Column(name = "picture", nullable = false)
-    private Byte[] picture;
+    private byte[] picture;
 
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -32,11 +34,11 @@ public class UserPicture extends ModelCommon {
         this.id = id;
     }
 
-    public Byte[] getPicture() {
+    public byte[] getPicture() {
         return picture;
     }
 
-    public void setPicture(Byte[] picture) {
+    public void setPicture(byte[] picture) {
         this.picture = picture;
     }
 
