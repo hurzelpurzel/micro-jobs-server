@@ -1,6 +1,9 @@
 package com.andreidodu.controller;
 
-import com.andreidodu.dto.*;
+import com.andreidodu.dto.AuthenticationRequestDTO;
+import com.andreidodu.dto.AuthenticationResponseDTO;
+import com.andreidodu.dto.RegisterRequestDTO;
+import com.andreidodu.dto.UserProfileDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.AuthenticationService;
 import com.andreidodu.service.JwtService;
@@ -22,24 +25,18 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
-    private final LogoutServiceImpl logoutServiceImpl;
-
     private final LogoutServiceImpl logoutService;
 
     final private JwtService jwtService;
 
     @PostMapping("/register")
 
-    public ResponseEntity<AuthenticationResponseDTO> register(
-            @RequestBody RegisterRequestDTO request
-    ) {
+    public ResponseEntity<AuthenticationResponseDTO> register(@RequestBody RegisterRequestDTO request) {
         return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponseDTO> authenticate(
-            @RequestBody AuthenticationRequestDTO request
-    ) {
+    public ResponseEntity<AuthenticationResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
@@ -49,19 +46,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refreshToken")
-    public AuthenticationResponseDTO refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
+    public AuthenticationResponseDTO refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         return service.refreshToken(request, response);
     }
 
     @PostMapping("/logout")
-    public void logout(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication
-    ) throws IOException {
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         logoutService.logout(request, response, authentication);
     }
 
