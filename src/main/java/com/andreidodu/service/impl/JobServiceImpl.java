@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -224,6 +225,15 @@ public class JobServiceImpl implements JobService {
         }
         this.jobMapper.getModelMapper().map(jobDTO, job);
         Job jobSaved = this.jobRepository.save(job);
+
+        // delete all job pictures
+        List<JobPicture> jobPictureList = job.getJobPictureList();
+        deleteFilesFromDisk(jobPictureList);
+        this.jobPictureRepository.deleteAll(jobPictureList);
+
+        // store the new job pictures
+        saveJobPictureModelList(jobDTO.getImagesContent(), job);
+
         return this.jobMapper.toDTO(jobSaved);
 
     }
