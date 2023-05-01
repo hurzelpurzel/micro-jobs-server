@@ -28,12 +28,12 @@ public class JobPublicController {
 
     @GetMapping("/{jobType}/{page}")
     public ResponseEntity<List<JobDTO>> getJobsByTypePaginated(@PathVariable Integer jobType, @PathVariable Integer page) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(jobType, page));
+        return ResponseEntity.ok(this.jobService.getAllPublic(jobType, page));
     }
 
     @GetMapping("/count/{jobType}")
     public ResponseEntity<GenericResponse<Long>> countAllJobsByJobType(@PathVariable Integer jobType) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByType(jobType)));
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countAllPublicByType(jobType)));
     }
 
 }

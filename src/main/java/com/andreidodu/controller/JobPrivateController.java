@@ -33,12 +33,12 @@ public class JobPrivateController {
 
     @GetMapping("/{jobType}/{page}")
     public ResponseEntity<List<JobDTO>> getMyJobsByTapePaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAll(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType, page));
+        return ResponseEntity.ok(this.jobService.getAllPrivate(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType, page));
     }
 
     @GetMapping("/count/{jobType}")
     public ResponseEntity<GenericResponse<Long>> getCountMyJobs(@PathVariable Integer jobType, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType)));
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countAllPrivateByTypeAndUsername(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType)));
     }
 
     @PostMapping

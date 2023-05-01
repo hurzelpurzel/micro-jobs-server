@@ -50,7 +50,7 @@ public class JobServiceImpl implements JobService {
         Job job = this.jobRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException("Job not found"));
         User publisher = job.getPublisher();
-        if (!publisher.getUsername().equals(username)){
+        if (!publisher.getUsername().equals(username)) {
             throw new ApplicationException("User not match");
         }
         JobDTO dto = this.jobMapper.toDTO(job);
@@ -76,19 +76,29 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<JobDTO> getAll(int type, int page) throws ApplicationException {
+    public List<JobDTO> getAllPublic(int type, int page) throws ApplicationException {
         JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
-        List<Job> models = this.jobPageableRepository.findByType(type, secondPageWithFiveElements);
+        List<Job> models = this.jobPageableRepository.findByTypeAndStatus(type, secondPageWithFiveElements, JobConst.STATUS_PUBLISHED);
         return this.jobMapper.toListDTO(models);
     }
 
     @Override
-    public List<JobDTO> getAll(String username, int type, int page) throws ApplicationException {
+    public long countAllPublicByType(int type) {
+        return this.jobRepository.countByTypeAndStatus(type, JobConst.STATUS_PUBLISHED);
+    }
+
+    @Override
+    public List<JobDTO> getAllPrivate(String username, int type, int page) throws ApplicationException {
         JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
         List<Job> models = this.jobPageableRepository.findByTypeAndPublisher_username(type, username, secondPageWithFiveElements);
         return this.jobMapper.toListDTO(models);
+    }
+
+    @Override
+    public long countAllPrivateByTypeAndUsername(String username, int type) {
+        return this.jobRepository.countByTypeAndPublisher_username(type, username);
     }
 
     @Override
@@ -219,14 +229,5 @@ public class JobServiceImpl implements JobService {
 
     }
 
-    @Override
-    public long countByType(int type) {
-        return this.jobRepository.countByType(type);
-    }
-
-    @Override
-    public long countByTypeAndUsername(String username, int type) {
-        return this.jobRepository.countByTypeAndPublisher_username(type, username);
-    }
 
 }
