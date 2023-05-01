@@ -12,6 +12,11 @@ public interface JobService {
 
     List<JobDTO> getAllPrivate(String username, int type, int page) throws ApplicationException;
 
+    List<JobDTO> getAllPrivateByTypeAndStatus(int type, int status, String username, int page) throws ApplicationException;
+
+    // TODO include in the getAll result
+    long countAllPrivateByTypeAndStatus(int type, int status, String username) throws ApplicationException;
+
     void delete(Long id, String username) throws ApplicationException;
 
     JobDTO save(JobDTO jobDTO, String username) throws ApplicationException;
@@ -25,4 +30,6 @@ public interface JobService {
     long countAllPrivateByTypeAndUsername(String username, int type);
 
     JobDTO getPublic(Long id) throws ApplicationException;
+
+    JobDTO getPrivateByStatus(Long id, Integer jobStatus, String username) throws ApplicationException;
 }

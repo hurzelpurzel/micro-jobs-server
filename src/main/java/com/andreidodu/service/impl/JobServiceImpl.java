@@ -70,6 +70,21 @@ public class JobServiceImpl implements JobService {
         return dto;
     }
 
+    @Override
+    public JobDTO getPrivateByStatus(Long id, Integer jobStatus, String username) throws ApplicationException {
+        User administrator = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new ApplicationException("User not found"));
+        if (!administrator.getRole().equals(Role.ADMIN)) {
+            throw new ApplicationException("User is not admin");
+        }
+        Job job = this.jobRepository.findById(id)
+                .orElseThrow(() -> new ApplicationException("Job not found"));
+        JobDTO dto = this.jobMapper.toDTO(job);
+        List<String> listOfPictureString = transformJobPictureListToStringList(job.getJobPictureList());
+        dto.setPictureNamesList(listOfPictureString);
+        return dto;
+    }
+
     private List<String> transformJobPictureListToStringList(List<JobPicture> jobPictureList) {
         return jobPictureList.stream().map(jobPicture ->
                 jobPicture.getPictureName()
@@ -80,10 +95,11 @@ public class JobServiceImpl implements JobService {
     public List<JobDTO> getAllPublic(int type, int page) throws ApplicationException {
         JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
-        List<Job> models = this.jobPageableRepository.findByTypeAndStatus(type, secondPageWithFiveElements, JobConst.STATUS_PUBLISHED);
+        List<Job> models = this.jobPageableRepository.findByTypeAndStatus(type, JobConst.STATUS_PUBLISHED, secondPageWithFiveElements);
         return this.jobMapper.toListDTO(models);
     }
 
+    // TODO include in the getAll result
     @Override
     public long countAllPublicByType(int type) {
         return this.jobRepository.countByTypeAndStatus(type, JobConst.STATUS_PUBLISHED);
@@ -97,10 +113,37 @@ public class JobServiceImpl implements JobService {
         return this.jobMapper.toListDTO(models);
     }
 
+    // TODO include in the getAll result
     @Override
     public long countAllPrivateByTypeAndUsername(String username, int type) {
         return this.jobRepository.countByTypeAndPublisher_username(type, username);
     }
+
+
+    @Override
+    public List<JobDTO> getAllPrivateByTypeAndStatus(int type, int status, String username, int page) throws ApplicationException {
+        JobDTOValidator.validateJobType(type);
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new ApplicationException("User not found"));
+        if (!Role.ADMIN.equals(user.getRole())) {
+            throw new ApplicationException("User is not admin");
+        }
+        Pageable pageable = PageRequest.of(page, 10);
+        List<Job> models = this.jobPageableRepository.findByTypeAndStatus(type, status, pageable);
+        return this.jobMapper.toListDTO(models);
+    }
+
+    // TODO include in the getAll result
+    @Override
+    public long countAllPrivateByTypeAndStatus(int type, int status, String username) throws ApplicationException {
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new ApplicationException("User not found"));
+        if (!Role.ADMIN.equals(user.getRole())) {
+            throw new ApplicationException("User is not admin");
+        }
+        return this.jobRepository.countByTypeAndStatus(type, status);
+    }
+
 
     @Override
     public void delete(Long jobId, String username) throws ApplicationException {

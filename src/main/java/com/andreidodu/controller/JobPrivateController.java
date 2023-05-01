@@ -41,6 +41,22 @@ public class JobPrivateController {
         return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countAllPrivateByTypeAndUsername(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType)));
     }
 
+    @GetMapping("/admin/{jobType}/{jobStatus}/{page}")
+    public ResponseEntity<List<JobDTO>> getAllPrivateAdminPaginated(@PathVariable Integer jobType, @PathVariable Integer jobStatus, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getAllPrivateByTypeAndStatus(jobType, jobStatus, this.jwtService.extractUsernameFromAuthorizzation(authorization), page));
+    }
+
+    @GetMapping("/admin/count/{jobType}/{jobStatus}")
+    public ResponseEntity<GenericResponse<Long>> getCountAllAdminPrivate(@PathVariable Integer jobType, @PathVariable Integer jobStatus, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countAllPrivateByTypeAndStatus(jobType, jobStatus, this.jwtService.extractUsernameFromAuthorizzation(authorization))));
+    }
+
+    @GetMapping("/admin/{jobStatus}/{id}")
+    public ResponseEntity<JobDTO> getPrivateByStatus(@PathVariable Long id, @PathVariable Integer jobStatus, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getPrivateByStatus(id, jobStatus, jwtService.extractUsernameFromAuthorizzation(authorization)));
+    }
+
+
     @PostMapping
     public ResponseEntity<JobDTO> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody JobDTO jobDTO) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtService.extractUsernameFromAuthorizzation(authorization)));
