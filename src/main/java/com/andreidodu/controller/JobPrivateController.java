@@ -52,7 +52,7 @@ public class JobPrivateController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+    public ResponseEntity<String> delete(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         this.jobService.delete(id, this.jwtService.extractUsernameFromAuthorizzation(authorization));
         return ResponseEntity.ok("OK");
     }
