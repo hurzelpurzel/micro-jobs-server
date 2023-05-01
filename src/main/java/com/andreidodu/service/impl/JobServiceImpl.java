@@ -44,13 +44,11 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO get(Long id) throws ApplicationException {
-        Optional<Job> modelOpt = this.jobRepository.findById(id);
-        if (modelOpt.isEmpty()) {
-            throw new ApplicationException("Job not found");
-        }
-        Job job = modelOpt.get();
+        Job job = this.jobRepository.findById(id)
+                .orElseThrow(() -> new ApplicationException("Job not found"));
         JobDTO dto = this.jobMapper.toDTO(job);
-        dto.setPictureNamesList(transformJobPictureListToStringList(job.getJobPictureList()));
+        List<String> listOfPictureString = transformJobPictureListToStringList(job.getJobPictureList());
+        dto.setPictureNamesList(listOfPictureString);
         return dto;
     }
 
@@ -179,17 +177,13 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO approveJob(Long jobId, String owner) throws ApplicationException {
-        Optional<User> userOpt = this.userRepository.findByUsername(owner);
-        if (userOpt.isEmpty()) {
-            throw new ApplicationException("User not found");
-        }
-        Optional<Job> modelOpt = this.jobRepository.findById(jobId);
-        if (modelOpt.isEmpty()) {
-            throw new ApplicationException("Job not found");
-        }
-        modelOpt.get().setStatus(JobConst.STATUS_PUBLISHED);
-        Job model = this.jobRepository.save(modelOpt.get());
-        return this.jobMapper.toDTO(model);
+        User user = this.userRepository.findByUsername(owner)
+                .orElseThrow(() -> new ApplicationException("User not found"));
+        Job job = this.jobRepository.findById(jobId)
+                .orElseThrow(() -> new ApplicationException("Job not found"));
+        job.setStatus(JobConst.STATUS_PUBLISHED);
+        Job jobSaved = this.jobRepository.save(job);
+        return this.jobMapper.toDTO(jobSaved);
     }
 
     @Override
@@ -197,17 +191,14 @@ public class JobServiceImpl implements JobService {
         if (!id.equals(jobDTO.getId())) {
             throw new ApplicationException("id not matching");
         }
-        Optional<Job> userOpt = this.jobRepository.findById(id);
-        if (userOpt.isEmpty()) {
-            throw new ApplicationException("job not found");
-        }
-        Job job = userOpt.get();
+        Job job = this.jobRepository.findById(id)
+                .orElseThrow(() -> new ApplicationException("job not found"));
         if (!job.getPublisher().getUsername().equals(owner)) {
             throw new ApplicationException("wrong user");
         }
         this.jobMapper.getModelMapper().map(jobDTO, job);
-        Job userSaved = this.jobRepository.save(job);
-        return this.jobMapper.toDTO(userSaved);
+        Job jobSaved = this.jobRepository.save(job);
+        return this.jobMapper.toDTO(jobSaved);
 
     }
 
