@@ -176,12 +176,12 @@ public class JobServiceImpl implements JobService {
         if (userOpt.isEmpty()) {
             throw new ApplicationException("job not found");
         }
-        Job user = userOpt.get();
-        if (!user.getPublisher().getUsername().equals(owner)) {
+        Job job = userOpt.get();
+        if (!job.getPublisher().getUsername().equals(owner)) {
             throw new ApplicationException("wrong user");
         }
-        this.jobMapper.getModelMapper().map(jobDTO, user);
-        Job userSaved = this.jobRepository.save(user);
+        this.jobMapper.getModelMapper().map(jobDTO, job);
+        Job userSaved = this.jobRepository.save(job);
         return this.jobMapper.toDTO(userSaved);
 
     }
