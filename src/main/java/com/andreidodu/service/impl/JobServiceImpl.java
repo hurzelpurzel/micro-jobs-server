@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -112,7 +113,7 @@ public class JobServiceImpl implements JobService {
 
     private JobPicture base64ImageToJobPictureModel(Job job, String base64ImageFull) throws NoSuchAlgorithmException, IOException {
         final byte[] imageBytesData = convertBase64StringToBytes(base64ImageFull);
-        final String fullFileName = calculateFileName(base64ImageFull, imageBytesData);
+        final String fullFileName = calculateFileName(job, base64ImageFull, imageBytesData);
         writeImageOnFile(fullFileName, imageBytesData);
         return createJobPictureModel(fullFileName, job);
     }
@@ -124,10 +125,18 @@ public class JobServiceImpl implements JobService {
         return Base64.getDecoder().decode(byteData);
     }
 
-    private String calculateFileName(final String base64ImageFull, final byte[] imageBytesData) throws NoSuchAlgorithmException {
-        final String bytesHashString = calculateBytesHashString(imageBytesData);
+    private String calculateFileName(final Job job, final String base64ImageFull, final byte[] imageBytesData) throws NoSuchAlgorithmException, IOException {
+        final byte[] signedImageBytesData = createNewArrayWithBytesAtTheEnd(imageBytesData, job.getId().toString().getBytes());
+        final String bytesHashString = calculateBytesHashString(signedImageBytesData);
         final String fileExtension = calculateFileExtension(base64ImageFull);
         return bytesHashString + "." + fileExtension;
+    }
+
+    private byte[] createNewArrayWithBytesAtTheEnd(final byte[] target, final byte[] bytesToBeAdded) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        output.write(target);
+        output.write(bytesToBeAdded);
+        return output.toByteArray();
     }
 
     private String calculateBytesHashString(final byte[] data) throws NoSuchAlgorithmException {
