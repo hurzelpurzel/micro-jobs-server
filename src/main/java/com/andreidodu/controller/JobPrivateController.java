@@ -23,12 +23,12 @@ public class JobPrivateController {
 
     @GetMapping("/{id}")
     public ResponseEntity<JobDTO> get(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getPrivate(id, jwtService.extractUsername(authorization)));
+        return ResponseEntity.ok(this.jobService.getPrivate(id, jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<JobDTO> approveJob(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsername(authorization)));
+        return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
     @GetMapping("/{jobType}/{page}")

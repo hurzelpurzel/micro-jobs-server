@@ -226,6 +226,11 @@
             <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
             <column name="version" type="INT"/>
         </createTable>
+        <addUniqueConstraint
+                columnNames="token, token_type"
+                constraintName="tok_tok_type_unique"
+                tableName="${tablePrefix}token"
+        />
     </changeSet>
 
 </databaseChangeLog>
