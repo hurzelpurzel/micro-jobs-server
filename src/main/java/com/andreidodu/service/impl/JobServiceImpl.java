@@ -18,14 +18,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,13 +48,16 @@ public class JobServiceImpl implements JobService {
         if (modelOpt.isEmpty()) {
             throw new ApplicationException("Job not found");
         }
-
-        JobDTO dto = this.jobMapper.toDTO(modelOpt.get());
-        dto.setPictureNamesList(new ArrayList<>());
-        modelOpt.get().getJobPictureList().stream().forEach(jobPicture -> {
-            dto.getPictureNamesList().add(new String(jobPicture.getPictureName()));
-        });
+        Job job = modelOpt.get();
+        JobDTO dto = this.jobMapper.toDTO(job);
+        dto.setPictureNamesList(transformJobPicturesToStringList(job.getJobPictureList()));
         return dto;
+    }
+
+    private List<String> transformJobPicturesToStringList(List<JobPicture> jobPictureList) {
+        return jobPictureList.stream().map(jobPicture ->
+                jobPicture.getPictureName()
+        ).collect(Collectors.toList());
     }
 
     @Override
@@ -58,8 +65,7 @@ public class JobServiceImpl implements JobService {
         JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
         List<Job> models = this.jobPageableRepository.findByType(type, secondPageWithFiveElements);
-        List<JobDTO> jobDTOList = this.jobMapper.toListDTO(models);
-        return jobDTOList;
+        return this.jobMapper.toListDTO(models);
     }
 
     @Override
@@ -77,42 +83,73 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO save(JobDTO jobDTO, String username) throws ApplicationException {
-        jobDTO.setStatus(JobConst.STATUS_CREATED);
-        Job model = this.jobMapper.toModel(jobDTO);
         Optional<User> userOpt = this.userRepository.findByUsername(username);
         if (userOpt.isEmpty()) {
             throw new ApplicationException("User not found");
         }
+        jobDTO.setStatus(JobConst.STATUS_CREATED);
+        Job model = this.jobMapper.toModel(jobDTO);
         model.setPublisher(userOpt.get());
         final Job job = this.jobRepository.save(model);
+        saveJobPictureModelList(jobDTO.getImagesContent(), job);
+        return this.jobMapper.toDTO(job);
+    }
 
-        Optional.ofNullable(jobDTO.getImagesContent()).orElse(new ArrayList<>()).stream()
-                .map(base64ImageFull -> {
-                    String fullFileName;
+
+    private void saveJobPictureModelList(final List<String> jobPictureStringList, Job job) {
+        Optional.ofNullable(jobPictureStringList)
+                .map(list -> list.stream().map(base64ImageFull -> {
                     try {
-                        Files.createDirectories(Paths.get("./files"));
-                        var data = base64ImageFull.substring(base64ImageFull.indexOf(",") + 1).getBytes("UTF-8");
-                        byte[] decoded = Base64.getDecoder().decode(data);
-                        byte[] hash = MessageDigest.getInstance("MD5").digest(data);
-                        String fileName = new BigInteger(1, hash).toString(16);
-                        String fileType = base64ImageFull.substring("data:image/".length(), base64ImageFull.indexOf(";base64"));
-                        fullFileName = fileName + "." + fileType;
-                        FileOutputStream outputStream = new FileOutputStream("./files/" + fullFileName);
-                        outputStream.write(decoded);
-                        outputStream.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (NoSuchAlgorithmException e) {
+                        return base64ImageToJobPictureModel(job, base64ImageFull);
+                    } catch (IOException | NoSuchAlgorithmException e) {
                         throw new RuntimeException(e);
                     }
-                    JobPicture modelJobPicture = new JobPicture();
-                    modelJobPicture.setPictureName(fullFileName);
-                    modelJobPicture.setJob(job);
-                    return modelJobPicture;
-                }).forEach(modelJobPicture -> {
+                }).collect(Collectors.toList())).orElse(new ArrayList<>())
+                .forEach(modelJobPicture -> {
                     this.jobPictureRepository.save(modelJobPicture);
                 });
-        return this.jobMapper.toDTO(job);
+    }
+
+    private JobPicture base64ImageToJobPictureModel(Job job, String base64ImageFull) throws NoSuchAlgorithmException, IOException {
+        final byte[] imageBytesData = convertBase64StringToBytes(base64ImageFull);
+        final String fullFileName = calculateFileName(base64ImageFull, imageBytesData);
+        writeImageOnFile(fullFileName, imageBytesData);
+        return createJobPictureModel(fullFileName, job);
+    }
+
+
+    private byte[] convertBase64StringToBytes(final String base64String) throws UnsupportedEncodingException {
+        final String dataSegment = base64String.substring(base64String.indexOf(",") + 1);
+        byte[] byteData = dataSegment.getBytes("UTF-8");
+        return Base64.getDecoder().decode(byteData);
+    }
+
+    private String calculateFileName(final String base64ImageFull, final byte[] imageBytesData) throws NoSuchAlgorithmException {
+        final String bytesHashString = calculateBytesHashString(imageBytesData);
+        final String fileExtension = calculateFileExtension(base64ImageFull);
+        return bytesHashString + "." + fileExtension;
+    }
+
+    private String calculateBytesHashString(final byte[] data) throws NoSuchAlgorithmException {
+        final byte[] hash = MessageDigest.getInstance("MD5").digest(data);
+        return new BigInteger(1, hash).toString(16);
+    }
+
+    private String calculateFileExtension(final String base64ImageString) {
+        return base64ImageString.substring("data:image/".length(), base64ImageString.indexOf(";base64"));
+    }
+
+    private void writeImageOnFile(final String fileName, final byte[] data) throws IOException {
+        FileOutputStream outputStream = new FileOutputStream("./files/" + fileName);
+        outputStream.write(data);
+        outputStream.close();
+    }
+
+    private JobPicture createJobPictureModel(final String fullFileName, final Job job) {
+        JobPicture modelJobPicture = new JobPicture();
+        modelJobPicture.setPictureName(fullFileName);
+        modelJobPicture.setJob(job);
+        return modelJobPicture;
     }
 
     @Override
