@@ -1,5 +1,6 @@
 package com.andreidodu.service.impl;
 
+import com.andreidodu.constants.ApplicationConst;
 import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
@@ -51,11 +52,11 @@ public class JobServiceImpl implements JobService {
         }
         Job job = modelOpt.get();
         JobDTO dto = this.jobMapper.toDTO(job);
-        dto.setPictureNamesList(transformJobPicturesToStringList(job.getJobPictureList()));
+        dto.setPictureNamesList(transformJobPictureListToStringList(job.getJobPictureList()));
         return dto;
     }
 
-    private List<String> transformJobPicturesToStringList(List<JobPicture> jobPictureList) {
+    private List<String> transformJobPictureListToStringList(List<JobPicture> jobPictureList) {
         return jobPictureList.stream().map(jobPicture ->
                 jobPicture.getPictureName()
         ).collect(Collectors.toList());
@@ -149,7 +150,8 @@ public class JobServiceImpl implements JobService {
     }
 
     private void writeImageOnFile(final String fileName, final byte[] data) throws IOException {
-        FileOutputStream outputStream = new FileOutputStream("./files/" + fileName);
+        final String fullFilePath = ApplicationConst.FILES_DIRECTORY + "/" + fileName;
+        FileOutputStream outputStream = new FileOutputStream(fullFilePath);
         outputStream.write(data);
         outputStream.close();
     }

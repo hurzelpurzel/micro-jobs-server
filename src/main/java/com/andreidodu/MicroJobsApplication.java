@@ -1,5 +1,6 @@
 package com.andreidodu;
 
+import com.andreidodu.constants.ApplicationConst;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -13,8 +14,6 @@ import java.nio.file.Paths;
 @EnableJpaAuditing
 public class MicroJobsApplication {
 
-    private final static String FILES_DIRECTORY = "./files";
-
     public static void main(String[] args) {
         try {
             SpringApplication.run(MicroJobsApplication.class, args);
@@ -25,10 +24,10 @@ public class MicroJobsApplication {
     }
 
     private static void createFilesDirectoryIfNotExists() throws IOException {
-        Path path = Paths.get(FILES_DIRECTORY);
+        Path path = Paths.get(ApplicationConst.FILES_DIRECTORY);
         if (!Files.exists(path)) {
             Files.createDirectories(path);
-            System.out.println("Created `" + FILES_DIRECTORY + "` directory :)");
+            System.out.println("Created `" + ApplicationConst.FILES_DIRECTORY + "` directory :)");
         }
     }
 
