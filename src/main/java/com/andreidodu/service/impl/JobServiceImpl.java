@@ -4,6 +4,7 @@ import com.andreidodu.constants.ApplicationConst;
 import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
+import com.andreidodu.exception.ValidationException;
 import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.model.Job;
 import com.andreidodu.model.JobPicture;
@@ -75,7 +76,7 @@ public class JobServiceImpl implements JobService {
         User administrator = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new ApplicationException("User not found"));
         if (!administrator.getRole().equals(Role.ADMIN)) {
-            throw new ApplicationException("User is not admin");
+            throw new ValidationException("User is not admin");
         }
         Job job = this.jobRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException("Job not found"));
@@ -153,7 +154,7 @@ public class JobServiceImpl implements JobService {
                 .orElseThrow(() -> new ApplicationException("Job does not exists"));
         // TODO add also the administrator here
         if (!user.getUsername().equals(job.getPublisher().getUsername())) {
-            throw new ApplicationException("You are nto allowed to do this operation");
+            throw new ValidationException("You are nto allowed to do this operation");
         }
         deleteFilesFromDisk(job.getJobPictureList());
         this.jobRepository.deleteByIdAndPublisher_Username(jobId, username);
@@ -263,7 +264,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobDTO update(Long id, JobDTO jobDTO, String owner) throws ApplicationException {
         if (!id.equals(jobDTO.getId())) {
-            throw new ApplicationException("id not matching");
+            throw new ValidationException("id not matching");
         }
         Job job = this.jobRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException("job not found"));

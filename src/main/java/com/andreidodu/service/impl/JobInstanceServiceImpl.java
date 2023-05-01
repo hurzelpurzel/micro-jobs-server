@@ -3,6 +3,7 @@ package com.andreidodu.service.impl;
 import com.andreidodu.constants.JobInstantConst;
 import com.andreidodu.dto.JobInstanceDTO;
 import com.andreidodu.exception.ApplicationException;
+import com.andreidodu.exception.ValidationException;
 import com.andreidodu.mapper.JobInstanceMapper;
 import com.andreidodu.model.Job;
 import com.andreidodu.model.JobInstance;
@@ -44,16 +45,16 @@ public class JobInstanceServiceImpl implements JobInstanceService {
     @Override
     public JobInstanceDTO save(JobInstanceDTO jobInstanceDTO) throws ApplicationException {
         if (jobInstanceDTO.getUserCustomerId() == null) {
-            throw new ApplicationException("Customer is mandatory");
+            throw new ValidationException("Customer is mandatory");
         }
         if (jobInstanceDTO.getUserWorkerId() == null) {
-            throw new ApplicationException("Worker is mandatory");
+            throw new ValidationException("Worker is mandatory");
         }
         if (jobInstanceDTO.getJobId() == null) {
-            throw new ApplicationException("Job is mandatory");
+            throw new ValidationException("Job is mandatory");
         }
         if (jobInstanceDTO.getUserCustomerId().equals(jobInstanceDTO.getUserWorkerId())) {
-            throw new ApplicationException("Worker can't match with Customer");
+            throw new ValidationException("Worker can't match with Customer");
         }
         Optional<User> userWorkerOpt = this.userRepository.findById(jobInstanceDTO.getUserWorkerId());
         if (userWorkerOpt.isEmpty()) {
@@ -74,7 +75,7 @@ public class JobInstanceServiceImpl implements JobInstanceService {
     @Override
     public JobInstanceDTO update(Long id, JobInstanceDTO jobInstanceDTO) throws ApplicationException {
         if (!id.equals(jobInstanceDTO.getId())) {
-            throw new ApplicationException("id not matching");
+            throw new ValidationException("id not matching");
         }
         Optional<JobInstance> userOpt = this.jobInstanceRepository.findById(id);
         if (userOpt.isEmpty()) {
