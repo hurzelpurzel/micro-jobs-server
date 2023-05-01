@@ -11,7 +11,7 @@ public interface JobService {
     List<JobDTO> getAll(int type, int page) throws ApplicationException;
     List<JobDTO> getAll(String username, int type, int page) throws ApplicationException;
 
-    void delete(Long id, String username);
+    void delete(Long id, String username) throws ApplicationException;
 
     JobDTO save(JobDTO jobDTO, String username) throws ApplicationException;
 

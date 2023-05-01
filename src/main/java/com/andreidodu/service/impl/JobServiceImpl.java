@@ -19,11 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.ApplicationScope;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -79,8 +77,24 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void delete(Long id, String username) {
-        this.jobRepository.deleteByIdAndPublisher_Username(id, username);
+    public void delete(Long jobId, String username) throws ApplicationException {
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new ApplicationException("User not found"));
+        Job job = this.jobRepository.findById(jobId)
+                .orElseThrow(() -> new ApplicationException("Job does not exists"));
+        // TODO add also the administrator here
+        if (!user.getUsername().equals(job.getPublisher().getUsername())) {
+            throw new ApplicationException("You are nto allowed to do this operation");
+        }
+        deleteFilesFromDisk(job.getJobPictureList());
+        this.jobRepository.deleteByIdAndPublisher_Username(jobId, username);
+    }
+
+    private void deleteFilesFromDisk(List<JobPicture> jobPictureList) {
+        jobPictureList.forEach(jobPicture -> {
+            File file = new File(ApplicationConst.FILES_DIRECTORY + "/" + jobPicture.getPictureName());
+            file.delete();
+        });
     }
 
     @Override
