@@ -1,5 +1,6 @@
 package com.andreidodu.dto;
 
+import com.andreidodu.model.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +19,5 @@ public class UserProfileDTO {
     private Integer status;
     private Double stars;
     private UserPictureDTO picture;
+    private Role role;
 }

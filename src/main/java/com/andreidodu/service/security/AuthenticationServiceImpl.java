@@ -39,7 +39,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public AuthenticationResponseDTO register(RegisterRequestDTO request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        System.out.println("encoded password: " + encodedPassword);
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -152,7 +151,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(user.getEmail())
                 .stars(user.getRating())
                 .lastname(user.getLastname())
-                .firstname(user.getFirstname());
+                .firstname(user.getFirstname())
+                .role(user.getRole());
 
         var picture = user.getUserPicture();
         if (picture != null) {

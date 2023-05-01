@@ -233,4 +233,19 @@
         />
     </changeSet>
 
+    <changeSet id="2023-05-01-009" author="Andrei Dodu" dbms="${dbms}">
+        <insert tableName="${tablePrefix}user">
+            <column name="username" value="admin"/>
+            <column name="email" value="admin@admin.com"/>
+            <column name="firstname" value="Admin"/>
+            <column name="lastname" value="Admin"/>
+            <column name="password" value="$2a$10$gAypKconAmHlLQkkRu51A.WAl2qYOQRRh5IwcCNK3K1jqnE508ow6"/>
+            <column name="role" value="ADMIN"/>
+            <column name="description" value="This is the admins profile"/>
+            <column name="rating" value="5"/>
+            <column name="status" value="0"/>
+            <column name="version" value="0"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

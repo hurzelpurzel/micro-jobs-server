@@ -239,7 +239,6 @@ public class JobServiceImpl implements JobService {
         saveJobPictureModelList(jobDTO.getImagesContent(), job);
 
         return this.jobMapper.toDTO(jobSaved);
-
     }
 
 
