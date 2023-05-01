@@ -7,6 +7,7 @@ import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.model.Job;
 import com.andreidodu.model.JobPicture;
+import com.andreidodu.model.Role;
 import com.andreidodu.model.User;
 import com.andreidodu.repository.JobPageableRepository;
 import com.andreidodu.repository.JobPictureRepository;
@@ -203,9 +204,12 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobDTO approveJob(Long jobId, String owner) throws ApplicationException {
-        User user = this.userRepository.findByUsername(owner)
+    public JobDTO approveJob(Long jobId, String usernameAdministrator) throws ApplicationException {
+        User administrator = this.userRepository.findByUsername(usernameAdministrator)
                 .orElseThrow(() -> new ApplicationException("User not found"));
+        if (administrator.getRole() != Role.ADMIN) {
+            throw new ApplicationException("User is not admin");
+        }
         Job job = this.jobRepository.findById(jobId)
                 .orElseThrow(() -> new ApplicationException("Job not found"));
         job.setStatus(JobConst.STATUS_PUBLISHED);

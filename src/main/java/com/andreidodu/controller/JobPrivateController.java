@@ -27,8 +27,8 @@ public class JobPrivateController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<JobDTO> approveJob(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsernameFromAuthorizzation(authorization)));
+    public ResponseEntity<JobDTO> approveJob(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationAdministrator) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsernameFromAuthorizzation(authorizationAdministrator)));
     }
 
     @GetMapping("/{jobType}/{page}")
