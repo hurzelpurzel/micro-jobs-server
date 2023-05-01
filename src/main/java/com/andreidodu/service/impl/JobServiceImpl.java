@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,8 +46,22 @@ public class JobServiceImpl implements JobService {
     private final JobMapper jobMapper;
 
     @Override
-    public JobDTO get(Long id) throws ApplicationException {
+    public JobDTO getPrivate(final Long id, final String username) throws ApplicationException {
         Job job = this.jobRepository.findById(id)
+                .orElseThrow(() -> new ApplicationException("Job not found"));
+        User publisher = job.getPublisher();
+        if (!publisher.getUsername().equals(username)){
+            throw new ApplicationException("User not match");
+        }
+        JobDTO dto = this.jobMapper.toDTO(job);
+        List<String> listOfPictureString = transformJobPictureListToStringList(job.getJobPictureList());
+        dto.setPictureNamesList(listOfPictureString);
+        return dto;
+    }
+
+    @Override
+    public JobDTO getPublic(Long id) throws ApplicationException {
+        Job job = this.jobRepository.findByIdAndStatus(id, JobConst.STATUS_PUBLISHED)
                 .orElseThrow(() -> new ApplicationException("Job not found"));
         JobDTO dto = this.jobMapper.toDTO(job);
         List<String> listOfPictureString = transformJobPictureListToStringList(job.getJobPictureList());

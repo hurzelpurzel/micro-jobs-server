@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/job")
+@RequestMapping(value = "/api/v1/job/private")
 @RequiredArgsConstructor
 public class JobPrivateController {
 
@@ -22,8 +22,8 @@ public class JobPrivateController {
     final private JwtService jwtService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobDTO> get(@PathVariable Long id) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.get(id));
+    public ResponseEntity<JobDTO> get(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.getPrivate(id, jwtService.extractUsername(authorization)));
     }
 
     @PostMapping("/{id}")
@@ -31,12 +31,12 @@ public class JobPrivateController {
         return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsername(authorization)));
     }
 
-    @GetMapping("/mine/{jobType}/{page}")
+    @GetMapping("/{jobType}/{page}")
     public ResponseEntity<List<JobDTO>> getMyJobsByTapePaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.getAll(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType, page));
     }
 
-    @GetMapping("/count/mine/{jobType}")
+    @GetMapping("/count/{jobType}")
     public ResponseEntity<GenericResponse<Long>> getCountMyJobs(@PathVariable Integer jobType, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countByTypeAndUsername(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType)));
     }
