@@ -4,9 +4,7 @@ import com.andreidodu.dto.GenericResponse;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.JobService;
-import com.andreidodu.service.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +16,6 @@ import java.util.List;
 public class JobPublicController {
 
     final private JobService jobService;
-
-    final private JwtService jwtService;
 
     @GetMapping("/{id}")
     public ResponseEntity<JobDTO> get(@PathVariable Long id) throws ApplicationException {

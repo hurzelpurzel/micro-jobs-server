@@ -56,7 +56,6 @@ public class JobPrivateController {
         return ResponseEntity.ok(this.jobService.getPrivateByStatus(id, jobStatus, jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
-
     @PostMapping
     public ResponseEntity<JobDTO> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody JobDTO jobDTO) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtService.extractUsernameFromAuthorizzation(authorization)));
