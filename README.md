@@ -1,6 +1,6 @@
 # MicroJobs
 
-Micro Jobs is a small platform that allows users to offer or to request services in return for money.
+Micro Jobs is a small platform that allows users to offer or to request services in return for money. Look [here](https://github.com/goto-eof/micro-jobs-client) for the front-end project.
 
 # Technologies
 - Java;
