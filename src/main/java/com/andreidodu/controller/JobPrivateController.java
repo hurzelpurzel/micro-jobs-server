@@ -1,18 +1,14 @@
 package com.andreidodu.controller;
 
-import com.andreidodu.dto.GenericResponse;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.dto.JobListPageDTO;
 import com.andreidodu.exception.ApplicationException;
-import com.andreidodu.model.Job;
 import com.andreidodu.service.JobService;
 import com.andreidodu.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/job/private")

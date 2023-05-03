@@ -47,7 +47,6 @@ public class JobPicture extends ModelCommon {
         this.job = job;
     }
 
-
     @Override
     public String toString() {
         return "JobPicture{" +

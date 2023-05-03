@@ -3,6 +3,7 @@ package com.andreidodu.service.impl;
 import com.andreidodu.constants.ApplicationConst;
 import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.JobDTO;
+import com.andreidodu.dto.JobPictureDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.exception.ValidationException;
 import com.andreidodu.mapper.JobMapper;
@@ -49,47 +50,28 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO getPrivate(final Long id, final String username) throws ApplicationException {
-        Job job = this.jobRepository.findById(id)
-                .orElseThrow(() -> new ApplicationException("Job not found"));
+        Job job = this.jobRepository.findById(id).orElseThrow(() -> new ApplicationException("Job not found"));
         User publisher = job.getPublisher();
         if (!publisher.getUsername().equals(username)) {
             throw new ApplicationException("User not match");
         }
-        JobDTO dto = this.jobMapper.toDTO(job);
-        List<String> listOfPictureString = transformJobPictureListToStringList(job.getJobPictureList());
-        dto.setPictureNamesList(listOfPictureString);
-        return dto;
+        return this.jobMapper.toDTO(job);
     }
 
     @Override
     public JobDTO getPublic(Long id) throws ApplicationException {
-        Job job = this.jobRepository.findByIdAndStatus(id, JobConst.STATUS_PUBLISHED)
-                .orElseThrow(() -> new ApplicationException("Job not found"));
-        JobDTO dto = this.jobMapper.toDTO(job);
-        List<String> listOfPictureString = transformJobPictureListToStringList(job.getJobPictureList());
-        dto.setPictureNamesList(listOfPictureString);
-        return dto;
+        Job job = this.jobRepository.findByIdAndStatus(id, JobConst.STATUS_PUBLISHED).orElseThrow(() -> new ApplicationException("Job not found"));
+        return this.jobMapper.toDTO(job);
     }
 
     @Override
     public JobDTO getPrivateByStatus(Long id, Integer jobStatus, String username) throws ApplicationException {
-        User administrator = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApplicationException("User not found"));
+        User administrator = this.userRepository.findByUsername(username).orElseThrow(() -> new ApplicationException("User not found"));
         if (!administrator.getRole().equals(Role.ADMIN)) {
             throw new ValidationException("User is not admin");
         }
-        Job job = this.jobRepository.findById(id)
-                .orElseThrow(() -> new ApplicationException("Job not found"));
-        JobDTO dto = this.jobMapper.toDTO(job);
-        List<String> listOfPictureString = transformJobPictureListToStringList(job.getJobPictureList());
-        dto.setPictureNamesList(listOfPictureString);
-        return dto;
-    }
-
-    private List<String> transformJobPictureListToStringList(List<JobPicture> jobPictureList) {
-        return jobPictureList.stream().map(jobPicture ->
-                jobPicture.getPictureName()
-        ).collect(Collectors.toList());
+        Job job = this.jobRepository.findById(id).orElseThrow(() -> new ApplicationException("Job not found"));
+        return this.jobMapper.toDTO(job);
     }
 
     @Override
@@ -100,7 +82,6 @@ public class JobServiceImpl implements JobService {
         return this.jobMapper.toListDTO(models);
     }
 
-    // TODO include in the getAll result
     @Override
     public long countAllPublicByType(int type) {
         return this.jobRepository.countByTypeAndStatus(type, JobConst.STATUS_PUBLISHED);
@@ -114,7 +95,6 @@ public class JobServiceImpl implements JobService {
         return this.jobMapper.toListDTO(models);
     }
 
-    // TODO include in the getAll result
     @Override
     public long countAllPrivateByTypeAndUsername(String username, int type) {
         return this.jobRepository.countByTypeAndPublisher_username(type, username);
@@ -124,8 +104,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<JobDTO> getAllPrivateByTypeAndStatus(int type, int status, String username, int page) throws ApplicationException {
         JobDTOValidator.validateJobType(type);
-        User user = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApplicationException("User not found"));
+        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new ApplicationException("User not found"));
         if (!Role.ADMIN.equals(user.getRole())) {
             throw new ApplicationException("User is not admin");
         }
@@ -134,11 +113,9 @@ public class JobServiceImpl implements JobService {
         return this.jobMapper.toListDTO(models);
     }
 
-    // TODO include in the getAll result
     @Override
     public long countAllPrivateByTypeAndStatus(int type, int status, String username) throws ApplicationException {
-        User user = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApplicationException("User not found"));
+        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new ApplicationException("User not found"));
         if (!Role.ADMIN.equals(user.getRole())) {
             throw new ApplicationException("User is not admin");
         }
@@ -148,10 +125,8 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void delete(Long jobId, String username) throws ApplicationException {
-        User user = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApplicationException("User not found"));
-        Job job = this.jobRepository.findById(jobId)
-                .orElseThrow(() -> new ApplicationException("Job does not exists"));
+        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new ApplicationException("User not found"));
+        Job job = this.jobRepository.findById(jobId).orElseThrow(() -> new ApplicationException("Job does not exists"));
         // TODO add also the administrator here
         if (!user.getUsername().equals(job.getPublisher().getUsername())) {
             throw new ValidationException("You are nto allowed to do this operation");
@@ -177,23 +152,22 @@ public class JobServiceImpl implements JobService {
         Job model = this.jobMapper.toModel(jobDTO);
         model.setPublisher(userOpt.get());
         final Job job = this.jobRepository.save(model);
-        saveJobPictureModelList(jobDTO.getImagesContent(), job);
+        saveJobPictureModelList(jobDTO.getJobPictureList(), job);
         return this.jobMapper.toDTO(job);
     }
 
 
-    private void saveJobPictureModelList(final List<String> jobPictureStringList, Job job) {
-        Optional.ofNullable(jobPictureStringList)
-                .map(list -> list.stream().map(base64ImageFull -> {
-                    try {
-                        return base64ImageToJobPictureModel(job, base64ImageFull);
-                    } catch (IOException | NoSuchAlgorithmException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).collect(Collectors.toList())).orElse(new ArrayList<>())
-                .forEach(modelJobPicture -> {
-                    this.jobPictureRepository.save(modelJobPicture);
-                });
+    private void saveJobPictureModelList(final List<JobPictureDTO> jobPictureDTOList, Job job) {
+        Optional.ofNullable(jobPictureDTOList)
+                .map(list -> list.stream()
+                        .map(jobPictureDTO -> jobPictureDTO.getContent())
+                        .map(base64ImageFull -> {
+                            try {
+                                return base64ImageToJobPictureModel(job, base64ImageFull);
+                            } catch (IOException | NoSuchAlgorithmException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }).collect(Collectors.toList())).orElse(new ArrayList<>()).forEach(this.jobPictureRepository::save);
     }
 
     private JobPicture base64ImageToJobPictureModel(Job job, String base64ImageFull) throws NoSuchAlgorithmException, IOException {
@@ -249,13 +223,11 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO approveJob(Long jobId, String usernameAdministrator) throws ApplicationException {
-        User administrator = this.userRepository.findByUsername(usernameAdministrator)
-                .orElseThrow(() -> new ApplicationException("User not found"));
+        User administrator = this.userRepository.findByUsername(usernameAdministrator).orElseThrow(() -> new ApplicationException("User not found"));
         if (administrator.getRole() != Role.ADMIN) {
             throw new ApplicationException("User is not admin");
         }
-        Job job = this.jobRepository.findById(jobId)
-                .orElseThrow(() -> new ApplicationException("Job not found"));
+        Job job = this.jobRepository.findById(jobId).orElseThrow(() -> new ApplicationException("Job not found"));
         job.setStatus(JobConst.STATUS_PUBLISHED);
         Job jobSaved = this.jobRepository.save(job);
         return this.jobMapper.toDTO(jobSaved);
@@ -266,21 +238,34 @@ public class JobServiceImpl implements JobService {
         if (!id.equals(jobDTO.getId())) {
             throw new ValidationException("id not matching");
         }
-        Job job = this.jobRepository.findById(id)
-                .orElseThrow(() -> new ApplicationException("job not found"));
+        Job job = this.jobRepository.findById(id).orElseThrow(() -> new ApplicationException("job not found"));
         if (!job.getPublisher().getUsername().equals(owner)) {
             throw new ApplicationException("wrong user");
         }
+        //jobDTO.setJobPictureList(jobDTO.getJobPictureList().stream().filter(pictureDTO -> pictureDTO.getContent() != null).collect(Collectors.toList()));
         this.jobMapper.getModelMapper().map(jobDTO, job);
         Job jobSaved = this.jobRepository.save(job);
 
         // delete all job pictures
         List<JobPicture> jobPictureList = job.getJobPictureList();
-        deleteFilesFromDisk(jobPictureList);
-        this.jobPictureRepository.deleteAll(jobPictureList);
-
+        List<String> jobPictureListOfStrings = jobDTO.getJobPictureList()
+                .stream()
+                .filter(jobPictureDTO -> jobPictureDTO.getContent() == null)
+                .map(jobPicture -> jobPicture.getPictureName())
+                .collect(Collectors.toList());
+        List<JobPicture> jobPictureListToBeDeleted = jobPictureList.stream()
+                .filter(jobPicture -> !jobPictureListOfStrings.contains(jobPicture.getPictureName()))
+                .collect(Collectors.toList());
+        deleteFilesFromDisk(jobPictureListToBeDeleted);
+        if (jobPictureListToBeDeleted.size() > 0) {
+            this.jobPictureRepository.deleteAll(jobPictureList);
+        }
+        List<JobPictureDTO> jobPictureDTOList = jobDTO.getJobPictureList()
+                .stream()
+                .filter(jobPictureDTO -> jobPictureDTO.getContent() != null)
+                .collect(Collectors.toList());
         // store the new job pictures
-        saveJobPictureModelList(jobDTO.getImagesContent(), job);
+        saveJobPictureModelList(jobPictureDTOList, job);
 
         return this.jobMapper.toDTO(jobSaved);
     }
