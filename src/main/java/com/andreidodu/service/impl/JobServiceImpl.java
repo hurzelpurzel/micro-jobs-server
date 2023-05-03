@@ -246,7 +246,7 @@ public class JobServiceImpl implements JobService {
         Job jobSaved = this.jobRepository.save(job);
 
         // delete all job pictures
-        List<JobPicture> jobPictureList = job.getJobPictureList();
+        List<JobPicture> jobPictureList = jobSaved.getJobPictureList();
         List<String> jobPictureListOfStrings = jobDTO.getJobPictureList()
                 .stream()
                 .filter(jobPictureDTO -> jobPictureDTO.getContent() == null)
@@ -264,7 +264,7 @@ public class JobServiceImpl implements JobService {
                 .filter(jobPictureDTO -> jobPictureDTO.getContent() != null)
                 .collect(Collectors.toList());
         // store the new job pictures
-        saveJobPictureModelList(jobPictureDTOList, job);
+        saveJobPictureModelList(jobPictureDTOList, jobSaved);
 
         return this.jobMapper.toDTO(jobSaved);
     }
