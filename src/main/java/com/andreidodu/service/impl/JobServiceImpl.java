@@ -242,7 +242,6 @@ public class JobServiceImpl implements JobService {
         if (!job.getPublisher().getUsername().equals(owner)) {
             throw new ApplicationException("wrong user");
         }
-        //jobDTO.setJobPictureList(jobDTO.getJobPictureList().stream().filter(pictureDTO -> pictureDTO.getContent() != null).collect(Collectors.toList()));
         this.jobMapper.getModelMapper().map(jobDTO, job);
         Job jobSaved = this.jobRepository.save(job);
 
