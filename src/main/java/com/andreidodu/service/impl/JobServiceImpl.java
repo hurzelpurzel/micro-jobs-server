@@ -158,16 +158,21 @@ public class JobServiceImpl implements JobService {
 
 
     private void saveJobPictureModelList(final List<JobPictureDTO> jobPictureDTOList, Job job) {
-        Optional.ofNullable(jobPictureDTOList)
-                .map(list -> list.stream()
-                        .map(jobPictureDTO -> jobPictureDTO.getContent())
-                        .map(base64ImageFull -> {
-                            try {
-                                return base64ImageToJobPictureModel(job, base64ImageFull);
-                            } catch (IOException | NoSuchAlgorithmException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }).collect(Collectors.toList())).orElse(new ArrayList<>()).forEach(this.jobPictureRepository::save);
+        if (jobPictureDTOList.size() > 0) {
+            final List<JobPicture> listOfModels = Optional.ofNullable(jobPictureDTOList)
+                    .map(list -> list.stream()
+                            .map(jobPictureDTO -> jobPictureDTO.getContent())
+                            .map(base64ImageFull -> {
+                                try {
+                                    return base64ImageToJobPictureModel(job, base64ImageFull);
+                                } catch (IOException | NoSuchAlgorithmException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }).collect(Collectors.toList())).get();
+            if (listOfModels.size() > 0) {
+                this.jobPictureRepository.saveAll(listOfModels);
+            }
+        }
     }
 
     private JobPicture base64ImageToJobPictureModel(Job job, String base64ImageFull) throws NoSuchAlgorithmException, IOException {
@@ -255,9 +260,9 @@ public class JobServiceImpl implements JobService {
         List<JobPicture> jobPictureListToBeDeleted = jobPictureList.stream()
                 .filter(jobPicture -> !jobPictureListOfStrings.contains(jobPicture.getPictureName()))
                 .collect(Collectors.toList());
-        deleteFilesFromDisk(jobPictureListToBeDeleted);
         if (jobPictureListToBeDeleted.size() > 0) {
-            this.jobPictureRepository.deleteAll(jobPictureList);
+            deleteFilesFromDisk(jobPictureListToBeDeleted);
+            this.jobPictureRepository.deleteAll(jobPictureListToBeDeleted);
         }
         List<JobPictureDTO> jobPictureDTOList = jobDTO.getJobPictureList()
                 .stream()
