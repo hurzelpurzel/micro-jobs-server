@@ -1,11 +1,9 @@
 package com.andreidodu.dto;
 
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,6 +20,9 @@ public class JobDTO extends DTOCommon {
     private AuthorDTO author = new AuthorDTO();
     private String pictureName;
     private List<String> pictureNamesList;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
+
 
 
 }

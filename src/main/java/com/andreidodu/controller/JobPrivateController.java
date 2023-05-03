@@ -2,7 +2,9 @@ package com.andreidodu.controller;
 
 import com.andreidodu.dto.GenericResponse;
 import com.andreidodu.dto.JobDTO;
+import com.andreidodu.dto.JobListPageDTO;
 import com.andreidodu.exception.ApplicationException;
+import com.andreidodu.model.Job;
 import com.andreidodu.service.JobService;
 import com.andreidodu.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -32,23 +34,17 @@ public class JobPrivateController {
     }
 
     @GetMapping("/{jobType}/{page}")
-    public ResponseEntity<List<JobDTO>> getAllPrivatePaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAllPrivate(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType, page));
-    }
-
-    @GetMapping("/count/{jobType}")
-    public ResponseEntity<GenericResponse<Long>> getCountAllPrivate(@PathVariable Integer jobType, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countAllPrivateByTypeAndUsername(this.jwtService.extractUsernameFromAuthorizzation(authorization), jobType)));
+    public ResponseEntity<JobListPageDTO> getAllPrivatePaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        final String username = this.jwtService.extractUsernameFromAuthorizzation(authorization);
+        JobListPageDTO result = new JobListPageDTO(this.jobService.getAllPrivate(username, jobType, page), this.jobService.countAllPrivateByTypeAndUsername(username, jobType));
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/admin/{jobType}/{jobStatus}/{page}")
-    public ResponseEntity<List<JobDTO>> getAllPrivateAdminPaginated(@PathVariable Integer jobType, @PathVariable Integer jobStatus, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.getAllPrivateByTypeAndStatus(jobType, jobStatus, this.jwtService.extractUsernameFromAuthorizzation(authorization), page));
-    }
-
-    @GetMapping("/admin/count/{jobType}/{jobStatus}")
-    public ResponseEntity<GenericResponse<Long>> getCountAllAdminPrivate(@PathVariable Integer jobType, @PathVariable Integer jobStatus, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
-        return ResponseEntity.ok(new GenericResponse<Long>(this.jobService.countAllPrivateByTypeAndStatus(jobType, jobStatus, this.jwtService.extractUsernameFromAuthorizzation(authorization))));
+    public ResponseEntity<JobListPageDTO> getAllPrivateAdminPaginated(@PathVariable Integer jobType, @PathVariable Integer jobStatus, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        final String username = this.jwtService.extractUsernameFromAuthorizzation(authorization);
+        JobListPageDTO result = new JobListPageDTO(this.jobService.getAllPrivateByTypeAndStatus(jobType, jobStatus, username, page), this.jobService.countAllPrivateByTypeAndStatus(jobType, jobStatus, username));
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/admin/{jobStatus}/{id}")
