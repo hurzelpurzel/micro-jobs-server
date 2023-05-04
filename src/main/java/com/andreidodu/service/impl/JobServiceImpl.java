@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(Transactional.TxType.REQUIRED)
 public class JobServiceImpl implements JobService {
-
+private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final JobPageableRepository jobPageableRepository;
@@ -142,6 +142,9 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO save(JobDTO jobDTO, String username) throws ApplicationException {
+        if (jobDTO.getJobPictureList().size()>MAX_NUMBER_ATTACHED_PICTURES){
+            throw new ValidationException("Maximum number of pictures allowed is " + MAX_NUMBER_ATTACHED_PICTURES);
+        }
         Optional<User> userOpt = this.userRepository.findByUsername(username);
         if (userOpt.isEmpty()) {
             throw new ApplicationException("User not found");
@@ -240,6 +243,9 @@ public class JobServiceImpl implements JobService {
     public JobDTO update(Long id, JobDTO jobDTO, String owner) throws ApplicationException {
         if (!id.equals(jobDTO.getId())) {
             throw new ValidationException("id not matching");
+        }
+        if (jobDTO.getJobPictureList().size()>MAX_NUMBER_ATTACHED_PICTURES){
+            throw new ValidationException("Maximum number of pictures allowed is " + MAX_NUMBER_ATTACHED_PICTURES);
         }
         Job job = this.jobRepository.findById(id).orElseThrow(() -> new ApplicationException("job not found"));
         if (!job.getPublisher().getUsername().equals(owner)) {

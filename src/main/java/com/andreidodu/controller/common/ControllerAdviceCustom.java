@@ -18,7 +18,7 @@ public class ControllerAdviceCustom {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ServerResultDTO> handleApplicationException(ValidationException e) {
-        return ResponseEntity.status(500).body(new ServerResultDTO(4, e.getMessage()));
+        return ResponseEntity.status(400).body(new ServerResultDTO(4, e.getMessage()));
     }
 
     @ExceptionHandler(PSQLException.class)
