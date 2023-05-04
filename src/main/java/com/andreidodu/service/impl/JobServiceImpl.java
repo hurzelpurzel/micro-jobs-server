@@ -246,6 +246,7 @@ public class JobServiceImpl implements JobService {
             throw new ApplicationException("wrong user");
         }
         this.jobMapper.getModelMapper().map(jobDTO, job);
+        job.setStatus(JobConst.STATUS_UPDATED);
         Job jobSaved = this.jobRepository.save(job);
 
         // delete all job pictures
