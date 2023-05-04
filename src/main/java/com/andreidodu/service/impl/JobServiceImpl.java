@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,7 +30,6 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -270,7 +268,6 @@ public class JobServiceImpl implements JobService {
                 .collect(Collectors.toList());
         // store the new job pictures
         saveJobPictureModelList(jobPictureDTOList, jobSaved);
-
         return this.jobMapper.toDTO(jobSaved);
     }
 
