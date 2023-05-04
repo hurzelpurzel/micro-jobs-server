@@ -248,28 +248,49 @@ public class JobServiceImpl implements JobService {
         this.jobMapper.getModelMapper().map(jobDTO, job);
         job.setStatus(JobConst.STATUS_UPDATED);
         Job jobSaved = this.jobRepository.save(job);
+        deleteJobPicturesNotInDTOList(jobDTO, jobSaved);
+        saveJobPicturesInDTOList(jobDTO, jobSaved);
+        return this.jobMapper.toDTO(jobSaved);
+    }
 
-        // delete all job pictures
+    private void saveJobPicturesInDTOList(JobDTO jobDTO, Job jobSaved) {
+        List<JobPictureDTO> jobPictureDTOListToBeSaved = retrieveJobPictureDTOToBeSaved(jobDTO);
+        saveJobPictureModelList(jobPictureDTOListToBeSaved, jobSaved);
+    }
+
+    private void deleteJobPicturesNotInDTOList(JobDTO jobDTO, Job jobSaved) {
         List<JobPicture> jobPictureList = jobSaved.getJobPictureList();
-        List<String> jobPictureListOfStrings = jobDTO.getJobPictureList()
+        List<String> jobPictureListOfNames = retrieveJobPictureListOfNamesFromDTO(jobDTO);
+        List<JobPicture> jobPictureListToBeDeleted = calculateJobPictureListToBeDeleted(jobPictureList, jobPictureListOfNames);
+        deletePicturesFromPictureList(jobPictureListToBeDeleted);
+    }
+
+    private static List<JobPictureDTO> retrieveJobPictureDTOToBeSaved(JobDTO jobDTO) {
+        return jobDTO.getJobPictureList()
                 .stream()
-                .filter(jobPictureDTO -> jobPictureDTO.getContent() == null)
-                .map(jobPicture -> jobPicture.getPictureName())
+                .filter(jobPictureDTO -> jobPictureDTO.getContent() != null)
                 .collect(Collectors.toList());
-        List<JobPicture> jobPictureListToBeDeleted = jobPictureList.stream()
-                .filter(jobPicture -> !jobPictureListOfStrings.contains(jobPicture.getPictureName()))
-                .collect(Collectors.toList());
+    }
+
+    private void deletePicturesFromPictureList(List<JobPicture> jobPictureListToBeDeleted) {
         if (jobPictureListToBeDeleted.size() > 0) {
             deleteFilesFromDisk(jobPictureListToBeDeleted);
             this.jobPictureRepository.deleteAll(jobPictureListToBeDeleted);
         }
-        List<JobPictureDTO> jobPictureDTOList = jobDTO.getJobPictureList()
-                .stream()
-                .filter(jobPictureDTO -> jobPictureDTO.getContent() != null)
+    }
+
+    private static List<JobPicture> calculateJobPictureListToBeDeleted(List<JobPicture> jobPictureList, List<String> jobPictureListOfNames) {
+        return jobPictureList.stream()
+                .filter(jobPicture -> !jobPictureListOfNames.contains(jobPicture.getPictureName()))
                 .collect(Collectors.toList());
-        // store the new job pictures
-        saveJobPictureModelList(jobPictureDTOList, jobSaved);
-        return this.jobMapper.toDTO(jobSaved);
+    }
+
+    private static List<String> retrieveJobPictureListOfNamesFromDTO(JobDTO jobDTO) {
+        return jobDTO.getJobPictureList()
+                .stream()
+                .filter(jobPictureDTO -> jobPictureDTO.getContent() == null)
+                .map(jobPicture -> jobPicture.getPictureName())
+                .collect(Collectors.toList());
     }
 
 
