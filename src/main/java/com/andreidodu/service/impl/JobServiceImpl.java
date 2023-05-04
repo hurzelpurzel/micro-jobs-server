@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(Transactional.TxType.REQUIRED)
 public class JobServiceImpl implements JobService {
-private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
+    private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final JobPageableRepository jobPageableRepository;
@@ -98,7 +99,6 @@ private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
         return this.jobRepository.countByTypeAndPublisher_username(type, username);
     }
 
-
     @Override
     public List<JobDTO> getAllPrivateByTypeAndStatus(int type, int status, String username, int page) throws ApplicationException {
         JobDTOValidator.validateJobType(type);
@@ -119,7 +119,6 @@ private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
         }
         return this.jobRepository.countByTypeAndStatus(type, status);
     }
-
 
     @Override
     public void delete(Long jobId, String username) throws ApplicationException {
@@ -142,7 +141,7 @@ private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
 
     @Override
     public JobDTO save(JobDTO jobDTO, String username) throws ApplicationException {
-        if (jobDTO.getJobPictureList().size()>MAX_NUMBER_ATTACHED_PICTURES){
+        if (jobDTO.getJobPictureList().size() > MAX_NUMBER_ATTACHED_PICTURES) {
             throw new ValidationException("Maximum number of pictures allowed is " + MAX_NUMBER_ATTACHED_PICTURES);
         }
         Optional<User> userOpt = this.userRepository.findByUsername(username);
@@ -157,19 +156,17 @@ private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
         return this.jobMapper.toDTO(job);
     }
 
-
     private void saveJobPictureModelList(final List<JobPictureDTO> jobPictureDTOList, Job job) {
-        if (jobPictureDTOList.size() > 0) {
-            final List<JobPicture> listOfModels = Optional.ofNullable(jobPictureDTOList)
-                    .map(list -> list.stream()
-                            .map(jobPictureDTO -> jobPictureDTO.getContent())
-                            .map(base64ImageFull -> {
-                                try {
-                                    return base64ImageToJobPictureModel(job, base64ImageFull);
-                                } catch (IOException | NoSuchAlgorithmException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }).collect(Collectors.toList())).get();
+        if (jobPictureDTOList != null && jobPictureDTOList.size() > 0) {
+            final List<JobPicture> listOfModels = jobPictureDTOList.stream()
+                    .map(jobPictureDTO -> jobPictureDTO.getContent())
+                    .map(base64ImageFull -> {
+                        try {
+                            return base64ImageToJobPictureModel(job, base64ImageFull);
+                        } catch (IOException | NoSuchAlgorithmException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }).collect(Collectors.toList());
             if (listOfModels.size() > 0) {
                 this.jobPictureRepository.saveAll(listOfModels);
             }
@@ -182,7 +179,6 @@ private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
         writeImageOnFile(fullFileName, imageBytesData);
         return createJobPictureModel(fullFileName, job);
     }
-
 
     private byte[] convertBase64StringToBytes(final String base64String) throws UnsupportedEncodingException {
         final String dataSegment = base64String.substring(base64String.indexOf(",") + 1);
@@ -244,7 +240,7 @@ private static Integer MAX_NUMBER_ATTACHED_PICTURES = 5;
         if (!id.equals(jobDTO.getId())) {
             throw new ValidationException("id not matching");
         }
-        if (jobDTO.getJobPictureList().size()>MAX_NUMBER_ATTACHED_PICTURES){
+        if (jobDTO.getJobPictureList().size() > MAX_NUMBER_ATTACHED_PICTURES) {
             throw new ValidationException("Maximum number of pictures allowed is " + MAX_NUMBER_ATTACHED_PICTURES);
         }
         Job job = this.jobRepository.findById(id).orElseThrow(() -> new ApplicationException("job not found"));
