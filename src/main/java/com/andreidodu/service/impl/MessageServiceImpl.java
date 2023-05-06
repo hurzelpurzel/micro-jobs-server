@@ -1,10 +1,19 @@
 package com.andreidodu.service.impl;
 
+import com.andreidodu.dto.ConversationDTO;
 import com.andreidodu.dto.MessageDTO;
+import com.andreidodu.dto.MessageRequestDTO;
+import com.andreidodu.dto.MessageResponseDTO;
 import com.andreidodu.exception.ApplicationException;
+import com.andreidodu.exception.ValidationException;
+import com.andreidodu.mapper.ConversationMapper;
 import com.andreidodu.mapper.MessageMapper;
+import com.andreidodu.mapper.MessageResponseMapper;
+import com.andreidodu.model.Conversation;
+import com.andreidodu.model.Job;
 import com.andreidodu.model.Message;
 import com.andreidodu.model.User;
+import com.andreidodu.repository.JobRepository;
 import com.andreidodu.repository.MessageRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.MessageService;
@@ -12,6 +21,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,8 +33,10 @@ public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
-
+    private final JobRepository jobRepository;
+    private final ConversationMapper conversationMapper;
     private final MessageMapper messageMapper;
+    private final MessageResponseMapper messageResponseMapper;
 
     @Override
     public MessageDTO get(Long id) throws ApplicationException {
@@ -39,29 +53,33 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessageDTO save(MessageDTO messageDTO) throws ApplicationException {
-        if (messageDTO.getUserFromId() == null) {
-            throw new ApplicationException("User from is null");
+    public MessageResponseDTO save(String username, MessageRequestDTO messageRequestDTO) throws ValidationException {
+        if (messageRequestDTO.getUserToId() == null) {
+            throw new ValidationException("User to is null");
         }
-        if (messageDTO.getUserToId() == null) {
-            throw new ApplicationException("User to is null");
-        }
-        if (messageDTO.getUserFromId().equals(messageDTO.getUserToId())) {
-            throw new ApplicationException("User from can not match with user to");
-        }
-        Optional<User> userFromOpt = this.userRepository.findById(messageDTO.getUserFromId());
+        Optional<User> userFromOpt = this.userRepository.findByUsername(username);
         if (userFromOpt.isEmpty()) {
-            throw new ApplicationException("User from not found");
+            throw new ValidationException("User from not found");
         }
-        Optional<User> userToOpt = this.userRepository.findById(messageDTO.getUserToId());
+        if (messageRequestDTO.getUserToId().equals(userFromOpt.get().getId())) {
+            throw new ValidationException("You cannot write a message to yourself");
+        }
+        Optional<User> userToOpt = this.userRepository.findById(messageRequestDTO.getUserToId());
         if (userToOpt.isEmpty()) {
-            throw new ApplicationException("User to not found");
+            throw new ValidationException("User to not found");
         }
-        Message model = this.messageMapper.toModel(messageDTO);
+        Optional<Job> jobOpt = this.jobRepository.findById(messageRequestDTO.getJobId());
+        if (jobOpt.isEmpty()) {
+            throw new ValidationException("job not found");
+        }
+        Message model = new Message();
+        model.setMessage(messageRequestDTO.getMessage());
+        model.setJob(jobOpt.get());
         model.setUserFrom(userFromOpt.get());
         model.setUserTo(userToOpt.get());
+        model.setStatus(1);
         final Message message = this.messageRepository.save(model);
-        return this.messageMapper.toDTO(message);
+        return this.messageResponseMapper.toDTO(message);
     }
 
     @Override
@@ -87,5 +105,19 @@ public class MessageServiceImpl implements MessageService {
         Message userSaved = this.messageRepository.save(message);
         return this.messageMapper.toDTO(userSaved);
     }
+
+    @Override
+    public List<ConversationDTO> getConversations(String username) {
+        List<Conversation> conversationDTOS = messageRepository.findByUsername(username);
+        return conversationMapper.toListDTO(conversationDTOS);
+    }
+
+    @Override
+    public List<MessageResponseDTO> getConversationMessages(String extractUsernameFromAuthorizzation, Long userToId, Long jobId) {
+        Optional<User> owner = this.userRepository.findByUsername(extractUsernameFromAuthorizzation);
+        List<Message> messages = this.messageRepository.findByJobUserToUserFrom(Arrays.asList(owner.get().getId(), userToId), jobId);
+        return this.messageResponseMapper.toListDTO(messages);
+    }
+
 
 }

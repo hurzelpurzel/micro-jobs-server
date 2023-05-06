@@ -194,6 +194,9 @@
             <column name="user_to_id" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="fk_to_rating" references="${tablePrefix}user(id)"/>
             </column>
+            <column name="job_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_job" references="${tablePrefix}job(id)"/>
+            </column>
             <column name="message" type="TEXT"/>
             <column name="status" type="INT">
                 <constraints nullable="false"/>

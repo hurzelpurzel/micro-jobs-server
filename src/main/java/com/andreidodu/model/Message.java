@@ -2,6 +2,8 @@ package com.andreidodu.model;
 
 import com.andreidodu.model.common.ModelCommon;
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -9,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @UniqueConstraint(columnNames = {"user_from_id", "user_to_id", "insert_date"}))
 @EntityListeners(AuditingEntityListener.class)
 public class Message extends ModelCommon {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +26,23 @@ public class Message extends ModelCommon {
     @JoinColumn(name = "user_to_id", nullable = false)
     private User userTo;
 
+    @ManyToOne
+    @JoinColumn(name = "job_id", nullable = false)
+    private Job job;
+
     @Column(name = "message", nullable = false)
     private String message;
 
     @Column(name = "status", nullable = false)
     private Integer status;
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
     public Long getId() {
         return id;

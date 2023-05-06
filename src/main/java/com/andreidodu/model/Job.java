@@ -43,6 +43,9 @@ public class Job extends ModelCommon {
     @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
     private List<JobPicture> jobPictureList;
 
+    @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
+    private List<Message> messageList;
+
     public Long getId() {
         return id;
     }

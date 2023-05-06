@@ -1,11 +1,18 @@
 package com.andreidodu.controller;
 
+import com.andreidodu.dto.ConversationDTO;
 import com.andreidodu.dto.MessageDTO;
+import com.andreidodu.dto.MessageRequestDTO;
+import com.andreidodu.dto.MessageResponseDTO;
 import com.andreidodu.exception.ApplicationException;
+import com.andreidodu.service.JwtService;
 import com.andreidodu.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/message")
@@ -13,15 +20,22 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
 
     final private MessageService messageService;
+    final private JwtService jwtService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MessageDTO> get(@PathVariable Long id) throws ApplicationException {
-        return ResponseEntity.ok(this.messageService.get(id));
+
+    @GetMapping
+    public ResponseEntity<List<ConversationDTO>> getConversations(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+        return ResponseEntity.ok(this.messageService.getConversations(this.jwtService.extractUsernameFromAuthorizzation(authorization)));
+    }
+
+    @GetMapping("/{userToId}/{jobId}")
+    public ResponseEntity<List<MessageResponseDTO>> getConversationMessages(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @PathVariable Long userToId, @PathVariable Long jobId) throws ApplicationException {
+        return ResponseEntity.ok(this.messageService.getConversationMessages(this.jwtService.extractUsernameFromAuthorizzation(authorization), userToId, jobId));
     }
 
     @PostMapping
-    public ResponseEntity<MessageDTO> save(@RequestBody MessageDTO messageDTO) throws ApplicationException {
-        return ResponseEntity.ok(this.messageService.save(messageDTO));
+    public ResponseEntity<MessageResponseDTO> save(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody MessageRequestDTO messageRequestDTO) throws ApplicationException {
+        return ResponseEntity.ok(this.messageService.save(this.jwtService.extractUsernameFromAuthorizzation(authorization), messageRequestDTO));
     }
 
     @PutMapping("/{id}")
