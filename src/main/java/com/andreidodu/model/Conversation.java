@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Conversation {
     private String usernameTo;
     private Long userFromId;
-    private Long userToId;
+    //private Long userToId;
     private Long jobId;
     private String jobTitle;
 }

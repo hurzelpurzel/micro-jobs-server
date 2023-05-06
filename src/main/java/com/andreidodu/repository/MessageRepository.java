@@ -11,14 +11,15 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
     @Query("SELECT DISTINCT new com.andreidodu.model.Conversation(" +
             "   m.userFrom.username, " +
             "   m.userFrom.id, " +
-            "   m.userTo.id, " +
+            //"   m.userTo.id, " +
             "   m.job.id, " +
             "   m.job.title" +
             ") " +
             "from Message m " +
-            "where m.userFrom.username like ?1 or m.userTo.username like ?1")
+            "where m.userTo.username like ?1 " +
+            "group by  m.userFrom.username, m.userFrom.id, m.job.id, m.job.title")
     List<Conversation> findByUsername(String username);
 
     @Query("select m from Message m where m.userTo.id in (?1) AND m.userFrom.id in (?1) AND m.job.id = ?2 order by createdDate")
-    List<Message> findByJobUserToUserFrom(List<Long> ids,  Long jobId);
+    List<Message> findByJobUserToUserFrom(List<Long> ids, Long jobId);
 }
