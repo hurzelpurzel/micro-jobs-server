@@ -21,7 +21,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -108,7 +107,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<ConversationDTO> getConversations(String username) {
-        List<Conversation> conversationDTOS = messageRepository.findByUsername(username);
+        List<Conversation> conversationDTOS = messageRepository.findConversationsByUsername(username);
         return conversationMapper.toListDTO(conversationDTOS);
     }
 
