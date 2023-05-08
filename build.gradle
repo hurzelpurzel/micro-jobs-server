@@ -14,8 +14,8 @@ plugins {
 }
 idea {
     module {
-        sourceDirs += file('generated-sources/')
-        generatedSourceDirs += file('generated-sources/')
+        sourceDirs += file('generated/')
+        generatedSourceDirs += file('generated/')
     }
 }
 
@@ -31,6 +31,9 @@ repositories {
 
         implementation "com.querydsl:querydsl-core:${queryDslVersion}"
         implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+        implementation 'com.mysema.querydsl:querydsl-jpa:3.7.4'
+        implementation "com.querydsl:querydsl-sql:${queryDslVersion}"
+
         annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
 
         compileOnly 'org.projectlombok:lombok'

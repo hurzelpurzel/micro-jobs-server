@@ -12,5 +12,6 @@
     <property name="clob" value="CLOB" dbms="mysql"/>
 
     <include file="db.changelog-create-table.0.1.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-create-table-channel.0.1.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

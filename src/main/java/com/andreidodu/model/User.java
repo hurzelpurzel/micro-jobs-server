@@ -1,6 +1,7 @@
 package com.andreidodu.model;
 
 import com.andreidodu.model.common.ModelCommon;
+import com.andreidodu.model.message.Message;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -69,13 +69,6 @@ public class User extends ModelCommon implements UserDetails {
 
     @OneToMany(mappedBy = "userTarget")
     private Set<Rating> ratingsRecevied;
-
-    @OneToMany(mappedBy = "userTo")
-    private Set<Message> messagesReceived;
-
-    @OneToMany(mappedBy = "userFrom")
-    private Set<Message> messagesSent;
-
 
     public Long getId() {
         return id;
@@ -213,22 +206,6 @@ public class User extends ModelCommon implements UserDetails {
 
     public void setRatingsRecevied(Set<Rating> ratingsRecevied) {
         this.ratingsRecevied = ratingsRecevied;
-    }
-
-    public Set<Message> getMessagesReceived() {
-        return messagesReceived;
-    }
-
-    public void setMessagesReceived(Set<Message> messagesReceived) {
-        this.messagesReceived = messagesReceived;
-    }
-
-    public Set<Message> getMessagesSent() {
-        return messagesSent;
-    }
-
-    public void setMessagesSent(Set<Message> messagesSent) {
-        this.messagesSent = messagesSent;
     }
 
     public Double getRating() {

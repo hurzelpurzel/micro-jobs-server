@@ -182,32 +182,6 @@
         />
     </changeSet>
 
-
-    <changeSet id="2023-04-24-007" author="Andrei Dodu" dbms="${dbms}">
-        <createTable tableName="${tablePrefix}message">
-            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_message"/>
-            </column>
-            <column name="user_from_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_from_rating" references="${tablePrefix}user(id)"/>
-            </column>
-            <column name="user_to_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_to_rating" references="${tablePrefix}user(id)"/>
-            </column>
-            <column name="job_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_job" references="${tablePrefix}job(id)"/>
-            </column>
-            <column name="message" type="TEXT"/>
-            <column name="status" type="INT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
-            <column name="update_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>
-            <column name="version" type="INT"/>
-        </createTable>
-    </changeSet>
-
-
     <changeSet id="2023-04-24-008" author="Andrei Dodu" dbms="${dbms}">
         <createTable tableName="${tablePrefix}token">
             <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">

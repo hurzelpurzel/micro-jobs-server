@@ -1,10 +1,12 @@
 package com.andreidodu.model;
 
 import com.andreidodu.model.common.ModelCommon;
+import com.andreidodu.model.message.Message;
+import com.andreidodu.model.message.Participant;
+import com.andreidodu.model.message.Room;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,9 +44,16 @@ public class Job extends ModelCommon {
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
     private List<JobPicture> jobPictureList;
-
     @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
-    private List<Message> messageList;
+    private List<Participant> participants;
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
+    }
 
     public Long getId() {
         return id;
