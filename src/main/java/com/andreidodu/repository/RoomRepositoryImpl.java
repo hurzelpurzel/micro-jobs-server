@@ -44,6 +44,14 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
+    public boolean userBelongsToRoom(String username, Long roomId) {
+        QParticipant participant = QParticipant.participant;
+        return queryFactory
+                .selectFrom(participant)
+                .where(participant.room.id.eq(roomId).and(participant.user.username.eq(username))).fetch().size() > 0;
+    }
+
+    @Override
     public List<Message> findMessagesByUsernameAndRoomId(String username, Long roomId) {
         QMessage message = QMessage.message1;
         QParticipant participant = QParticipant.participant;

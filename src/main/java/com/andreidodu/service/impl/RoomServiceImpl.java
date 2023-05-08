@@ -3,6 +3,7 @@ package com.andreidodu.service.impl;
 import com.andreidodu.dto.MessageDTO;
 import com.andreidodu.dto.RoomDTO;
 import com.andreidodu.dto.RoomExtendedDTO;
+import com.andreidodu.exception.ValidationException;
 import com.andreidodu.mapper.MessageMapper;
 import com.andreidodu.mapper.RoomExtendedMapper;
 import com.andreidodu.mapper.RoomMapper;
@@ -83,7 +84,10 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
-    public List<MessageDTO> getMessages(String username, Long roomId) {
+    public List<MessageDTO> getMessages(String username, Long roomId) throws ValidationException {
+        if (!roomRepository.userBelongsToRoom(username, roomId)){
+            throw new ValidationException("wrong room id");
+        }
         return this.messageMapper.toListDTO(roomRepository.findMessagesByUsernameAndRoomId(username, roomId));
     }
 

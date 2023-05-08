@@ -11,6 +11,8 @@ public interface RoomRepository {
 
     Optional<Room> findByJobIdAndParticipants(Long jobId, String username);
 
+    boolean userBelongsToRoom(String username, Long roomId);
+
     List<Message> findMessagesByUsernameAndRoomId(String username, Long jobId);
 
     List<RoomExtended> findRoomsByUsername(String username);
