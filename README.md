@@ -22,7 +22,7 @@ Micro Jobs is a small platform that allows users to offer or to request services
 - insert requests/offers
 - picture upload
 - admin: approve post
-- message module: write/read messages between users
+- message module: write/read DM between users
 - ...wip
 
 # Architecture
