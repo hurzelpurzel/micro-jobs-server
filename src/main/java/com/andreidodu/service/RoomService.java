@@ -8,7 +8,7 @@ import com.andreidodu.exception.ValidationException;
 import java.util.List;
 
 public interface RoomService {
-    MessageDTO createMessage(String usernameFrom, MessageDTO messageDTO);
+    MessageDTO createMessage(String usernameFrom, MessageDTO messageDTO) throws ValidationException;
 
     RoomDTO getRoom(String username, Long jobId);
 

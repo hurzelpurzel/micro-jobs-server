@@ -36,7 +36,14 @@ public class RoomServiceImpl implements RoomService {
     private final RoomExtendedMapper roomExtendedMapper;
 
     @Override
-    public MessageDTO createMessage(String username, MessageDTO messageDTO) {
+    public MessageDTO createMessage(String username, MessageDTO messageDTO) throws ValidationException {
+        Long roomId = messageDTO.getRoomId();
+        if (!roomRepository.userBelongsToRoom(username, roomId)){
+            throw new ValidationException("wrong room id");
+        }
+        if (roomRepository.userBelongsToRoomAndIsJobAuthor(username, roomId)){
+            throw new ValidationException("you can not chat with yourself");
+        }
         Optional<Room> roomOptional = roomCrudRepository.findById(messageDTO.getRoomId());
         User user = userRepository.findByUsername(username).get();
         Room room = roomOptional.get();
@@ -87,6 +94,9 @@ public class RoomServiceImpl implements RoomService {
     public List<MessageDTO> getMessages(String username, Long roomId) throws ValidationException {
         if (!roomRepository.userBelongsToRoom(username, roomId)){
             throw new ValidationException("wrong room id");
+        }
+        if (roomRepository.userBelongsToRoomAndIsJobAuthor(username, roomId)){
+            throw new ValidationException("you can not chat with yourself");
         }
         return this.messageMapper.toListDTO(roomRepository.findMessagesByUsernameAndRoomId(username, roomId));
     }

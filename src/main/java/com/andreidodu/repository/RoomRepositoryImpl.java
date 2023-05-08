@@ -52,6 +52,17 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
+    public boolean userBelongsToRoomAndIsJobAuthor(String username, Long roomId) {
+        QParticipant participant = QParticipant.participant;
+        return queryFactory
+                .selectFrom(participant)
+                .where(participant.room.id.eq(roomId)
+                        .and(participant.user.username.eq(username))
+                        .and(participant.job.publisher.username.eq(username)))
+                .fetch().size() > 0;
+    }
+
+    @Override
     public List<Message> findMessagesByUsernameAndRoomId(String username, Long roomId) {
         QMessage message = QMessage.message1;
         QParticipant participant = QParticipant.participant;
@@ -85,7 +96,13 @@ public class RoomRepositoryImpl implements RoomRepository {
                         rm.get(0, Long.class),
                         rm.get(1, String.class),
                         rm.get(2, String.class),
-                        rm.get(3, Long.class)
+                        rm.get(3, Long.class),
+                        queryFactory
+                                .selectFrom(participant)
+                                .where(participant.room.id.eq(rm.get(0, Long.class)))
+                                .stream()
+                                .map(par -> par.getUser().getUsername())
+                                .collect(Collectors.toList())
                 )).collect(Collectors.toList());
     }
 }

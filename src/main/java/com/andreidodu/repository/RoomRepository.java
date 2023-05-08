@@ -13,6 +13,8 @@ public interface RoomRepository {
 
     boolean userBelongsToRoom(String username, Long roomId);
 
+    boolean userBelongsToRoomAndIsJobAuthor(String username, Long roomId);
+
     List<Message> findMessagesByUsernameAndRoomId(String username, Long jobId);
 
     List<RoomExtended> findRoomsByUsername(String username);

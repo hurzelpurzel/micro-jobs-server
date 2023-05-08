@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -14,4 +16,5 @@ public class RoomExtendedDTO {
     private String title;
     private String description;
     private Long jobId;
+    private List<String> participants;
 }
