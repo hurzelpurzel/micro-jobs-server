@@ -95,9 +95,6 @@ public class RoomServiceImpl implements RoomService {
         if (!roomRepository.userBelongsToRoom(username, roomId)){
             throw new ValidationException("wrong room id");
         }
-        if (roomRepository.userBelongsToRoomAndIsJobAuthor(username, roomId)){
-            throw new ValidationException("you can not chat with yourself");
-        }
         return this.messageMapper.toListDTO(roomRepository.findMessagesByUsernameAndRoomId(username, roomId));
     }
 
