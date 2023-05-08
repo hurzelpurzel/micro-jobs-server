@@ -1,5 +1,7 @@
 package com.andreidodu.service.impl;
 
+import com.andreidodu.constants.MessageConst;
+import com.andreidodu.constants.RoomConst;
 import com.andreidodu.dto.MessageDTO;
 import com.andreidodu.dto.RoomDTO;
 import com.andreidodu.dto.RoomExtendedDTO;
@@ -47,7 +49,7 @@ public class RoomServiceImpl implements RoomService {
 
         Message message = new Message();
         message.setMessage(messageDTO.getMessage());
-        message.setStatus(1);
+        message.setStatus(MessageConst.STATUS_CREATED);
         message.setUser(user);
         message.setRoom(room);
         messageRepository.save(message);
@@ -65,7 +67,7 @@ public class RoomServiceImpl implements RoomService {
             Job job = jobRepository.findById(jobId).get();
             room = new Room();
             room.setDescription(job.getDescription());
-            room.setStatus(1);
+            room.setStatus(RoomConst.STATUS_CREATED);
             room.setTitle(job.getTitle());
             room = roomCrudRepository.save(room);
 
