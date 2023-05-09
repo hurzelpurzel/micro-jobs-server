@@ -47,14 +47,19 @@ public class RoomServiceImpl implements RoomService {
         User user = userRepository.findByUsername(username).get();
         Room room = roomOptional.get();
 
+        Message message = createMessage(messageDTO, user, room);
+        messageRepository.save(message);
+
+        return this.messageMapper.toDTO(message);
+    }
+
+    private static Message createMessage(MessageDTO messageDTO, User user, Room room) {
         Message message = new Message();
         message.setMessage(messageDTO.getMessage());
         message.setStatus(MessageConst.STATUS_CREATED);
         message.setUser(user);
         message.setRoom(room);
-        messageRepository.save(message);
-
-        return this.messageMapper.toDTO(message);
+        return message;
     }
 
     @Override
@@ -65,27 +70,44 @@ public class RoomServiceImpl implements RoomService {
         Room room = null;
         if (roomOpt.isEmpty()) {
             Job job = jobRepository.findById(jobId).get();
-            room = new Room();
-            room.setDescription(job.getDescription());
-            room.setStatus(RoomConst.STATUS_CREATED);
-            room.setTitle(job.getTitle());
+            room = createRoom(job);
             room = roomCrudRepository.save(room);
 
-            Participant participant = new Participant();
-            participant.setRoom(room);
-            participant.setUser(user);
-            participant.setJob(job);
+            Participant participant = createParticipant(user, room, job);
             participantRepository.save(participant);
-            participant = new Participant();
-            participant.setRoom(room);
-            participant.setUser(job.getPublisher());
-            participant.setJob(job);
+            participant = createHostParticipant(room, job);
             participantRepository.save(participant);
         } else {
             room = roomOpt.get();
         }
 
         return this.roomMapper.toDTO(room);
+    }
+
+    private static Room createRoom(Job job) {
+        Room room;
+        room = new Room();
+        room.setDescription(job.getDescription());
+        room.setStatus(RoomConst.STATUS_CREATED);
+        room.setTitle(job.getTitle());
+        return room;
+    }
+
+    private static Participant createHostParticipant(Room room, Job job) {
+        Participant participant;
+        participant = new Participant();
+        participant.setRoom(room);
+        participant.setUser(job.getPublisher());
+        participant.setJob(job);
+        return participant;
+    }
+
+    private static Participant createParticipant(User user, Room room, Job job) {
+        Participant participant = new Participant();
+        participant.setRoom(room);
+        participant.setUser(user);
+        participant.setJob(job);
+        return participant;
     }
 
 
