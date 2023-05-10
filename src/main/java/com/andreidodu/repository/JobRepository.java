@@ -3,6 +3,7 @@ package com.andreidodu.repository;
 import com.andreidodu.model.Job;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface JobRepository extends CrudRepository<Job, Long> {
@@ -12,5 +13,5 @@ public interface JobRepository extends CrudRepository<Job, Long> {
 
     Optional<Job> findByIdAndStatus(Long id, int status);
 
-    long countByTypeAndStatus(int type, int statusPublished);
+    long countByTypeAndStatusIn(int type, List<Integer> statuses);
 }

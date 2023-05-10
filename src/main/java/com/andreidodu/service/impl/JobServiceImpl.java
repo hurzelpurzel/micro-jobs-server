@@ -31,6 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -77,13 +78,13 @@ public class JobServiceImpl implements JobService {
     public List<JobDTO> getAllPublic(int type, int page) throws ApplicationException {
         JobDTOValidator.validateJobType(type);
         Pageable secondPageWithFiveElements = PageRequest.of(page, 10);
-        List<Job> models = this.jobPageableRepository.findByTypeAndStatus(type, JobConst.STATUS_PUBLISHED, secondPageWithFiveElements);
+        List<Job> models = this.jobPageableRepository.findByTypeAndStatusIn(type, Arrays.asList(JobConst.STATUS_PUBLISHED), secondPageWithFiveElements);
         return this.jobMapper.toListDTO(models);
     }
 
     @Override
     public long countAllPublicByType(int type) {
-        return this.jobRepository.countByTypeAndStatus(type, JobConst.STATUS_PUBLISHED);
+        return this.jobRepository.countByTypeAndStatusIn(type, Arrays.asList(JobConst.STATUS_PUBLISHED));
     }
 
     @Override
@@ -100,24 +101,24 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<JobDTO> getAllPrivateByTypeAndStatus(int type, int status, String username, int page) throws ApplicationException {
+    public List<JobDTO> getAllPrivateByTypeAndStatus(int type, List<Integer> statuses, String username, int page) throws ApplicationException {
         JobDTOValidator.validateJobType(type);
         User user = this.userRepository.findByUsername(username).orElseThrow(() -> new ApplicationException("User not found"));
         if (!Role.ADMIN.equals(user.getRole())) {
             throw new ApplicationException("User is not admin");
         }
         Pageable pageable = PageRequest.of(page, 10);
-        List<Job> models = this.jobPageableRepository.findByTypeAndStatus(type, status, pageable);
+        List<Job> models = this.jobPageableRepository.findByTypeAndStatusIn(type, statuses, pageable);
         return this.jobMapper.toListDTO(models);
     }
 
     @Override
-    public long countAllPrivateByTypeAndStatus(int type, int status, String username) throws ApplicationException {
+    public long countAllPrivateByTypeAndStatus(int type, List<Integer> statuses, String username) throws ApplicationException {
         User user = this.userRepository.findByUsername(username).orElseThrow(() -> new ApplicationException("User not found"));
         if (!Role.ADMIN.equals(user.getRole())) {
             throw new ApplicationException("User is not admin");
         }
-        return this.jobRepository.countByTypeAndStatus(type, status);
+        return this.jobRepository.countByTypeAndStatusIn(type, statuses);
     }
 
     @Override

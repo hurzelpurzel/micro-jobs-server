@@ -1,5 +1,6 @@
 package com.andreidodu.controller;
 
+import com.andreidodu.constants.JobConst;
 import com.andreidodu.dto.JobDTO;
 import com.andreidodu.dto.JobListPageDTO;
 import com.andreidodu.exception.ApplicationException;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 @RestController
 @RequestMapping(value = "/api/v1/job/private")
 @RequiredArgsConstructor
@@ -19,31 +22,31 @@ public class JobPrivateController {
 
     final private JwtService jwtService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/jobId/{id}")
     public ResponseEntity<JobDTO> getPrivate(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.getPrivate(id, jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/jobId/{id}")
     public ResponseEntity<JobDTO> approveJob(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationAdministrator) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsernameFromAuthorizzation(authorizationAdministrator)));
     }
 
-    @GetMapping("/{jobType}/{page}")
+    @GetMapping("/jobType/{jobType}/page/{page}")
     public ResponseEntity<JobListPageDTO> getAllPrivatePaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         final String username = this.jwtService.extractUsernameFromAuthorizzation(authorization);
         JobListPageDTO result = new JobListPageDTO(this.jobService.getAllPrivate(username, jobType, page), this.jobService.countAllPrivateByTypeAndUsername(username, jobType));
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/admin/{jobType}/{jobStatus}/{page}")
-    public ResponseEntity<JobListPageDTO> getAllPrivateAdminPaginated(@PathVariable Integer jobType, @PathVariable Integer jobStatus, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
+    @GetMapping("/admin/jobType/{jobType}/page/{page}")
+    public ResponseEntity<JobListPageDTO> getAllPrivateAdminPaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         final String username = this.jwtService.extractUsernameFromAuthorizzation(authorization);
-        JobListPageDTO result = new JobListPageDTO(this.jobService.getAllPrivateByTypeAndStatus(jobType, jobStatus, username, page), this.jobService.countAllPrivateByTypeAndStatus(jobType, jobStatus, username));
+        JobListPageDTO result = new JobListPageDTO(this.jobService.getAllPrivateByTypeAndStatus(jobType, Arrays.asList(JobConst.STATUS_CREATED, JobConst.STATUS_UPDATED),  username, page), this.jobService.countAllPrivateByTypeAndStatus(jobType, Arrays.asList(JobConst.STATUS_CREATED, JobConst.STATUS_UPDATED), username));
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/admin/{jobStatus}/{id}")
+    @GetMapping("/admin/jobStatus/{jobStatus}/jobId/{id}")
     public ResponseEntity<JobDTO> getPrivateByStatus(@PathVariable Long id, @PathVariable Integer jobStatus, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.getPrivateByStatus(id, jobStatus, jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
@@ -53,12 +56,12 @@ public class JobPrivateController {
         return ResponseEntity.ok(this.jobService.save(jobDTO, this.jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/jobId/{id}")
     public ResponseEntity<JobDTO> update(@PathVariable Long id, @RequestBody JobDTO jobDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         return ResponseEntity.ok(this.jobService.update(id, jobDTO, this.jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/jobId/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         this.jobService.delete(id, this.jwtService.extractUsernameFromAuthorizzation(authorization));
         return ResponseEntity.ok("OK");

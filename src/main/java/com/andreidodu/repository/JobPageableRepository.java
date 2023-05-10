@@ -9,5 +9,5 @@ import java.util.List;
 public interface JobPageableRepository extends PagingAndSortingRepository<Job, Long> {
     List<Job> findByTypeAndPublisher_username(int type, String username, Pageable pageable);
 
-    List<Job> findByTypeAndStatus(int type, int status, Pageable pageable);
+    List<Job> findByTypeAndStatusIn(int type, List<Integer> statuses, Pageable pageable);
 }
