@@ -28,6 +28,8 @@ public class Job extends ModelCommon {
 
     @Column(name = "type", nullable = false)
     private Integer type;
+    @Column(name = "picture", nullable = true)
+    private String picture;
 
     @ManyToOne
     @JoinColumn(name = "user_publisher_id", nullable = false)
@@ -48,6 +50,14 @@ public class Job extends ModelCommon {
     private List<Participant> participants;
     @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
     private List<Room> rooms;
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public List<Room> getRooms() {
         return rooms;

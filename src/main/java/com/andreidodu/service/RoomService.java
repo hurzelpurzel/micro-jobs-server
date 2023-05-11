@@ -1,5 +1,6 @@
 package com.andreidodu.service;
 
+import com.andreidodu.dto.JobDTO;
 import com.andreidodu.dto.MessageDTO;
 import com.andreidodu.dto.RoomDTO;
 import com.andreidodu.dto.RoomExtendedDTO;
@@ -15,4 +16,6 @@ public interface RoomService {
     List<MessageDTO> getMessages(String username, Long roomId) throws ValidationException;
 
     List<RoomExtendedDTO> getRooms(String username);
+
+    JobDTO getJobByRoomId(String extractUsernameFromAuthorizzation, Long roomId);
 }

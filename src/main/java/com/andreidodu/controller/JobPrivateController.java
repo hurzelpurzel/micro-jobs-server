@@ -6,6 +6,7 @@ import com.andreidodu.dto.JobListPageDTO;
 import com.andreidodu.exception.ApplicationException;
 import com.andreidodu.service.JobService;
 import com.andreidodu.service.JwtService;
+import com.andreidodu.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class JobPrivateController {
     final private JobService jobService;
 
     final private JwtService jwtService;
+
+    final private RoomService roomService;
 
     @GetMapping("/jobId/{id}")
     public ResponseEntity<JobDTO> getPrivate(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
@@ -70,5 +73,10 @@ public class JobPrivateController {
     public ResponseEntity<String> delete(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         this.jobService.delete(id, this.jwtService.extractUsernameFromAuthorizzation(authorization));
         return ResponseEntity.ok("OK");
+    }
+
+    @GetMapping("/roomId/{roomId}")
+    public ResponseEntity<JobDTO> getJobByRoomId(@PathVariable Long roomId, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationAdministrator) throws ApplicationException {
+        return ResponseEntity.ok(this.roomService.getJobByRoomId(jwtService.extractUsernameFromAuthorizzation(authorizationAdministrator), roomId));
     }
 }

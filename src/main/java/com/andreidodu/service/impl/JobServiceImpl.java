@@ -31,10 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -152,12 +149,25 @@ public class JobServiceImpl implements JobService {
         jobDTO.setStatus(JobConst.STATUS_CREATED);
         Job model = this.jobMapper.toModel(jobDTO);
         model.setPublisher(userOpt.get());
-        final Job job = this.jobRepository.save(model);
-        saveJobPictureModelList(jobDTO.getJobPictureList(), job);
+        Job job = this.jobRepository.save(model);
+        Iterable<JobPicture> savedJobPictureList = saveJobPictureModelList(jobDTO.getJobPictureList(), job);
+        final Optional<String> mainPictureName = extractMainJobPicture(savedJobPictureList);
+        if (mainPictureName.isPresent()) {
+            job.setPicture(mainPictureName.get());
+            job = this.jobRepository.save(job);
+        }
         return this.jobMapper.toDTO(job);
     }
 
-    private void saveJobPictureModelList(final List<JobPictureDTO> jobPictureDTOList, Job job) {
+    private Optional<String> extractMainJobPicture(Iterable<JobPicture> savedJobPictureList) {
+        Iterator<JobPicture> jobPictureIterator = savedJobPictureList.iterator();
+        if (jobPictureIterator.hasNext()) {
+            return Optional.of(jobPictureIterator.next().getPictureName());
+        }
+        return Optional.empty();
+    }
+
+    private Iterable<JobPicture> saveJobPictureModelList(final List<JobPictureDTO> jobPictureDTOList, Job job) {
         if (jobPictureDTOList != null && jobPictureDTOList.size() > 0) {
             final List<JobPicture> listOfModels = jobPictureDTOList.stream()
                     .map(jobPictureDTO -> jobPictureDTO.getContent())
@@ -169,9 +179,10 @@ public class JobServiceImpl implements JobService {
                         }
                     }).collect(Collectors.toList());
             if (listOfModels.size() > 0) {
-                this.jobPictureRepository.saveAll(listOfModels);
+                return this.jobPictureRepository.saveAll(listOfModels);
             }
         }
+        return new ArrayList<>();
     }
 
     private JobPicture base64ImageToJobPictureModel(Job job, String base64ImageFull) throws NoSuchAlgorithmException, IOException {
@@ -252,13 +263,18 @@ public class JobServiceImpl implements JobService {
         job.setStatus(JobConst.STATUS_UPDATED);
         Job jobSaved = this.jobRepository.save(job);
         deleteJobPicturesNotInDTOList(jobDTO, jobSaved);
-        saveJobPicturesInDTOList(jobDTO, jobSaved);
+        Iterable<JobPicture> savedJobPictureList = saveJobPicturesInDTOList(jobDTO, jobSaved);
+        final Optional<String> mainPictureName = extractMainJobPicture(savedJobPictureList);
+        if (mainPictureName.isPresent()) {
+            job.setPicture(mainPictureName.get());
+            job = this.jobRepository.save(job);
+        }
         return this.jobMapper.toDTO(jobSaved);
     }
 
-    private void saveJobPicturesInDTOList(JobDTO jobDTO, Job jobSaved) {
+    private Iterable<JobPicture> saveJobPicturesInDTOList(JobDTO jobDTO, Job jobSaved) {
         List<JobPictureDTO> jobPictureDTOListToBeSaved = retrieveJobPictureDTOToBeSaved(jobDTO);
-        saveJobPictureModelList(jobPictureDTOListToBeSaved, jobSaved);
+        return saveJobPictureModelList(jobPictureDTOListToBeSaved, jobSaved);
     }
 
     private void deleteJobPicturesNotInDTOList(JobDTO jobDTO, Job jobSaved) {

@@ -80,6 +80,7 @@
             <column name="status" type="INT">
                 <constraints nullable="false"/>
             </column>
+            <column name="picture" type="VARCHAR" />
             <column name="user_publisher_id" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="fk_publisher_job"
                              references="${tablePrefix}user(id)"/>

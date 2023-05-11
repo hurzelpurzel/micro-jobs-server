@@ -2,10 +2,12 @@ package com.andreidodu.service.impl;
 
 import com.andreidodu.constants.MessageConst;
 import com.andreidodu.constants.RoomConst;
+import com.andreidodu.dto.JobDTO;
 import com.andreidodu.dto.MessageDTO;
 import com.andreidodu.dto.RoomDTO;
 import com.andreidodu.dto.RoomExtendedDTO;
 import com.andreidodu.exception.ValidationException;
+import com.andreidodu.mapper.JobMapper;
 import com.andreidodu.mapper.MessageMapper;
 import com.andreidodu.mapper.RoomExtendedMapper;
 import com.andreidodu.mapper.RoomMapper;
@@ -36,6 +38,7 @@ public class RoomServiceImpl implements RoomService {
     private final ParticipantRepository participantRepository;
     private final RoomMapper roomMapper;
     private final RoomExtendedMapper roomExtendedMapper;
+    private final JobMapper jobMapper;
 
     @Override
     public MessageDTO createMessage(String username, MessageDTO messageDTO) throws ValidationException {
@@ -131,5 +134,10 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<RoomExtendedDTO> getRooms(String username) {
         return roomExtendedMapper.toListDTO(roomRepository.findRoomsByUsername(username));
+    }
+
+    @Override
+    public JobDTO getJobByRoomId(String extractUsernameFromAuthorizzation, Long roomId) {
+        return this.jobMapper.toDTO(this.roomCrudRepository.findById(roomId).get().getJob());
     }
 }

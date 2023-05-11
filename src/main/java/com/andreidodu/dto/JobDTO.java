@@ -2,6 +2,7 @@ package com.andreidodu.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,5 +20,5 @@ public class JobDTO extends DTOCommon {
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
     private List<JobPictureDTO> jobPictureList;
-
+    private String picture;
 }
