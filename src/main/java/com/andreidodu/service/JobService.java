@@ -21,7 +21,7 @@ public interface JobService {
 
     JobDTO save(JobDTO jobDTO, String username) throws ApplicationException;
 
-    JobDTO approveJob(Long jobId, String usernameAdministrator) throws ApplicationException;
+    JobDTO changeJobStatus(Long jobId, int jobStatus, String usernameAdministrator) throws ApplicationException;
 
     JobDTO update(Long id, JobDTO jobDTO, String owner) throws ApplicationException;
 

@@ -27,9 +27,14 @@ public class JobPrivateController {
         return ResponseEntity.ok(this.jobService.getPrivate(id, jwtService.extractUsernameFromAuthorizzation(authorization)));
     }
 
-    @PostMapping("/jobId/{id}")
+    @PostMapping("/approve/jobId/{id}")
     public ResponseEntity<JobDTO> approveJob(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationAdministrator) throws ApplicationException {
-        return ResponseEntity.ok(this.jobService.approveJob(id, jwtService.extractUsernameFromAuthorizzation(authorizationAdministrator)));
+        return ResponseEntity.ok(this.jobService.changeJobStatus(id, JobConst.STATUS_PUBLISHED, jwtService.extractUsernameFromAuthorizzation(authorizationAdministrator)));
+    }
+
+    @PostMapping("/unpublish/jobId/{id}")
+    public ResponseEntity<JobDTO> unpublishJob(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationAdministrator) throws ApplicationException {
+        return ResponseEntity.ok(this.jobService.changeJobStatus(id, JobConst.STATUS_UNPUBLISHED, jwtService.extractUsernameFromAuthorizzation(authorizationAdministrator)));
     }
 
     @GetMapping("/jobType/{jobType}/page/{page}")
@@ -42,7 +47,7 @@ public class JobPrivateController {
     @GetMapping("/admin/jobType/{jobType}/page/{page}")
     public ResponseEntity<JobListPageDTO> getAllPrivateAdminPaginated(@PathVariable Integer jobType, @PathVariable Integer page, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) throws ApplicationException {
         final String username = this.jwtService.extractUsernameFromAuthorizzation(authorization);
-        JobListPageDTO result = new JobListPageDTO(this.jobService.getAllPrivateByTypeAndStatus(jobType, Arrays.asList(JobConst.STATUS_CREATED, JobConst.STATUS_UPDATED),  username, page), this.jobService.countAllPrivateByTypeAndStatus(jobType, Arrays.asList(JobConst.STATUS_CREATED, JobConst.STATUS_UPDATED), username));
+        JobListPageDTO result = new JobListPageDTO(this.jobService.getAllPrivateByTypeAndStatus(jobType, Arrays.asList(JobConst.STATUS_CREATED, JobConst.STATUS_UPDATED, JobConst.STATUS_UNPUBLISHED), username, page), this.jobService.countAllPrivateByTypeAndStatus(jobType, Arrays.asList(JobConst.STATUS_CREATED, JobConst.STATUS_UPDATED), username));
         return ResponseEntity.ok(result);
     }
 
