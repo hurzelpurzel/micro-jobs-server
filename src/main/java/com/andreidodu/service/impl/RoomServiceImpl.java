@@ -40,7 +40,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public MessageDTO createMessage(String username, MessageDTO messageDTO) throws ValidationException {
         Long roomId = messageDTO.getRoomId();
-        if (!roomRepository.userBelongsToRoom(username, roomId)){
+        if (!roomRepository.userBelongsToRoom(username, roomId)) {
             throw new ValidationException("wrong room id");
         }
         Optional<Room> roomOptional = roomCrudRepository.findById(messageDTO.getRoomId());
@@ -91,7 +91,15 @@ public class RoomServiceImpl implements RoomService {
         room.setStatus(RoomConst.STATUS_CREATED);
         room.setTitle(job.getTitle());
         room.setJob(job);
+        room.setPictureName(extractMainPictureName(job));
         return room;
+    }
+
+    private static String extractMainPictureName(Job job) {
+        if (job.getJobPictureList() != null && job.getJobPictureList().size() > 0) {
+            return job.getJobPictureList().get(0).getPictureName();
+        }
+        return "";
     }
 
     private static Participant createHostParticipant(Room room, Job job) {
@@ -114,7 +122,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<MessageDTO> getMessages(String username, Long roomId) throws ValidationException {
-        if (!roomRepository.userBelongsToRoom(username, roomId)){
+        if (!roomRepository.userBelongsToRoom(username, roomId)) {
             throw new ValidationException("wrong room id");
         }
         return this.messageMapper.toListDTO(roomRepository.findMessagesByUsernameAndRoomId(username, roomId));

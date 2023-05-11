@@ -16,5 +16,6 @@ public class RoomExtendedDTO {
     private String title;
     private String description;
     private Long jobId;
+    private String pictureName;
     private List<String> participants;
 }

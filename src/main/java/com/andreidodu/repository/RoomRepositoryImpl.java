@@ -83,7 +83,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         QRoom room = QRoom.room;
         return this.queryFactory
-                .select(room.id, room.title, room.description, participant.job.id)
+                .select(room.id, room.title, room.description, participant.job.id, room.pictureName)
                 .distinct()
                 .from(room, participant)
                 .where(room.id.in(JPAExpressions
@@ -97,6 +97,7 @@ public class RoomRepositoryImpl implements RoomRepository {
                         rm.get(1, String.class),
                         rm.get(2, String.class),
                         rm.get(3, Long.class),
+                        rm.get(4, String.class),
                         queryFactory
                                 .selectFrom(participant)
                                 .where(participant.room.id.eq(rm.get(0, Long.class)))

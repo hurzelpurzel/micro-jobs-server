@@ -29,6 +29,16 @@ public class Room extends ModelCommon {
     @ManyToOne
     @JoinColumn(name = "job_id", nullable = false)
     private Job job;
+    @Column(name = "picture_name")
+    private String pictureName;
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
+    }
 
     public Job getJob() {
         return job;
