@@ -26,7 +26,17 @@ public class Room extends ModelCommon {
     private List<Message> messages;
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<Participant> participants;
+    @ManyToOne
+    @JoinColumn(name = "job_id", nullable = false)
+    private Job job;
 
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
     public List<Participant> getParticipants() {
         return participants;

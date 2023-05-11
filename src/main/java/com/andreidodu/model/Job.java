@@ -46,6 +46,16 @@ public class Job extends ModelCommon {
     private List<JobPicture> jobPictureList;
     @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
     private List<Participant> participants;
+    @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
+    private List<Room> rooms;
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
 
     public List<Participant> getParticipants() {
         return participants;

@@ -18,7 +18,7 @@ public class RoomMapper extends ModelMapperCommon<Room, RoomDTO> {
     @PostConstruct
     public void postConstruct() {
         super.getModelMapper().typeMap(Room.class, RoomDTO.class).addMappings(mapper -> {
-            //mapper.<Long>map(src -> src.getJob().getId(), (destination, value) -> destination.setJobId(value));
+            //mapper.<Long>map(src -> src.getParticipants().get(0).getJob().getId(), (destination, value) -> destination.setJobId(value));
         });
     }
 }

@@ -90,6 +90,7 @@ public class RoomServiceImpl implements RoomService {
         room.setDescription(job.getDescription());
         room.setStatus(RoomConst.STATUS_CREATED);
         room.setTitle(job.getTitle());
+        room.setJob(job);
         return room;
     }
 
