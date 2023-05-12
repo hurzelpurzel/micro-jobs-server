@@ -1,5 +1,6 @@
 # https://www.baeldung.com/spring-boot-docker-images
 FROM adoptopenjdk:11-jre-hotspot as builder
+COPY ./ ./
 RUN gradlew build
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
