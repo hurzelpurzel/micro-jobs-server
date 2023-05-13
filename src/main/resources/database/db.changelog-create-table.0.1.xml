@@ -143,7 +143,7 @@
                 <constraints nullable="false" foreignKeyName="fk_user_user_picture" unique="true"
                              references="${tablePrefix}user(id)"/>
             </column>
-            <column name="picture" type="bytea">
+            <column name="picture_name" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
             <column name="insert_date" type="DATETIME" defaultValueComputed="${defaultTimestamp}"/>

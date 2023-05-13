@@ -16,6 +16,7 @@ import com.andreidodu.repository.JobPictureRepository;
 import com.andreidodu.repository.JobRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.JobService;
+import com.andreidodu.util.ImageUtil;
 import com.andreidodu.validators.JobDTOValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -186,47 +187,12 @@ public class JobServiceImpl implements JobService {
     }
 
     private JobPicture base64ImageToJobPictureModel(Job job, String base64ImageFull) throws NoSuchAlgorithmException, IOException {
-        final byte[] imageBytesData = convertBase64StringToBytes(base64ImageFull);
-        final String fullFileName = calculateFileName(job, base64ImageFull, imageBytesData);
-        writeImageOnFile(fullFileName, imageBytesData);
+        final byte[] imageBytesData = ImageUtil.convertBase64StringToBytes(base64ImageFull);
+        final String fullFileName = ImageUtil.calculateFileName(job.getId().toString(), base64ImageFull, imageBytesData);
+        ImageUtil.writeImageOnFile(fullFileName, imageBytesData);
         return createJobPictureModel(fullFileName, job);
     }
 
-    private byte[] convertBase64StringToBytes(final String base64String) throws UnsupportedEncodingException {
-        final String dataSegment = base64String.substring(base64String.indexOf(",") + 1);
-        byte[] byteData = dataSegment.getBytes("UTF-8");
-        return Base64.getDecoder().decode(byteData);
-    }
-
-    private String calculateFileName(final Job job, final String base64ImageFull, final byte[] imageBytesData) throws NoSuchAlgorithmException, IOException {
-        final byte[] signedImageBytesData = createNewArrayWithBytesAtTheEnd(imageBytesData, job.getId().toString().getBytes());
-        final String bytesHashString = calculateBytesHashString(signedImageBytesData);
-        final String fileExtension = calculateFileExtension(base64ImageFull);
-        return bytesHashString + "." + fileExtension;
-    }
-
-    private byte[] createNewArrayWithBytesAtTheEnd(final byte[] target, final byte[] bytesToBeAdded) throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        output.write(target);
-        output.write(bytesToBeAdded);
-        return output.toByteArray();
-    }
-
-    private String calculateBytesHashString(final byte[] data) throws NoSuchAlgorithmException {
-        final byte[] hash = MessageDigest.getInstance("MD5").digest(data);
-        return new BigInteger(1, hash).toString(16);
-    }
-
-    private String calculateFileExtension(final String base64ImageString) {
-        return base64ImageString.substring("data:image/".length(), base64ImageString.indexOf(";base64"));
-    }
-
-    private void writeImageOnFile(final String fileName, final byte[] data) throws IOException {
-        final String fullFilePath = ApplicationConst.FILES_DIRECTORY + "/" + fileName;
-        FileOutputStream outputStream = new FileOutputStream(fullFilePath);
-        outputStream.write(data);
-        outputStream.close();
-    }
 
     private JobPicture createJobPictureModel(final String fullFileName, final Job job) {
         JobPicture modelJobPicture = new JobPicture();

@@ -12,4 +12,6 @@ public class MessageDTO extends DTOCommon {
     private String username;
     private String message;
     private Integer status;
+    private String picture;
+    private String pictureName;
 }
