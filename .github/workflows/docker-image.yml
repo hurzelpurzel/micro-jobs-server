@@ -19,9 +19,9 @@ jobs:
       with:
         image: ${{ env.IMAGE_NAME }}
         tags: latest ${{ github.sha }}
-        context: ./sourcecode
+        context: .
         containerfiles: |
-          ./sourcecode/Dockerfile
+          Dockerfile
 
     - name: Log in to the GitHub Container registry
       uses: redhat-actions/podman-login@v1
