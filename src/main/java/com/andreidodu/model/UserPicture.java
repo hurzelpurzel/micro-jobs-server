@@ -17,14 +17,20 @@ public class UserPicture extends ModelCommon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-
-    @Column(name = "picture", nullable = false)
-    private byte[] picture;
-
+    @Column(name = "picture_name", nullable = false)
+    private String pictureName;
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
+
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
+    }
 
     public Long getId() {
         return id;
@@ -34,13 +40,7 @@ public class UserPicture extends ModelCommon {
         this.id = id;
     }
 
-    public byte[] getPicture() {
-        return picture;
-    }
 
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
 
     public User getUser() {
         return user;
@@ -55,7 +55,7 @@ public class UserPicture extends ModelCommon {
     public String toString() {
         return "UserPicture{" +
                 "id=" + id +
-                ", picture=" + Arrays.toString(picture) +
+                ", pictureName=" + pictureName +
                 ", user=" + user.getId() +
                 '}';
     }

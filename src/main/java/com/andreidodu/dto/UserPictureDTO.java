@@ -9,5 +9,5 @@ public class UserPictureDTO extends DTOCommon {
 
     private Long id;
     private Long userId;
-    private String picture;
+    private String pictureName;
 }

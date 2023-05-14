@@ -10,12 +10,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 public interface AuthenticationService {
 
 
-    AuthenticationResponseDTO register(RegisterRequestDTO request);
+    AuthenticationResponseDTO register(RegisterRequestDTO request) throws NoSuchAlgorithmException, IOException;
 
     AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request);
 

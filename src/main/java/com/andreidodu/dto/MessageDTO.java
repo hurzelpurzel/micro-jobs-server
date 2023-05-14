@@ -9,8 +9,9 @@ public class MessageDTO extends DTOCommon {
     private Long id;
     private Long roomId;
     private Long jobId;
-    private Long userFromId;
-    private Long userToId;
+    private String username;
     private String message;
     private Integer status;
+    private String picture;
+    private String pictureName;
 }
