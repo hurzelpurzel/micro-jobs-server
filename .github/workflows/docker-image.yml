@@ -8,9 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Docker Build and Push
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags:  hurzelpurzel/micro-jobs-server:latest 
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag hurzelpurzel/micro-jobs-server:latest
+    - name: Build the Docker image
+      run: docker push hurzelpurzel/micro-jobs-server:latest
