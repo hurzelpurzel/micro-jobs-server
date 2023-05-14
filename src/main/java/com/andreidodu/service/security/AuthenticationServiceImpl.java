@@ -10,6 +10,7 @@ import com.andreidodu.repository.UserPictureRepository;
 import com.andreidodu.repository.UserRepository;
 import com.andreidodu.service.AuthenticationService;
 import com.andreidodu.service.JwtService;
+import com.andreidodu.util.ImageUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @Service
@@ -37,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserPictureMapper userPictureMapper;
 
 
-    public AuthenticationResponseDTO register(RegisterRequestDTO request) {
+    public AuthenticationResponseDTO register(RegisterRequestDTO request) throws NoSuchAlgorithmException, IOException {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -50,9 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
         var savedUser = userRepository.save(user);
         if (request.getPicture() != null) {
-            UserPicture userPicture = new UserPicture();
-            userPicture.setPicture(request.getPicture().getBytes());
-            userPicture.setUser(savedUser);
+            UserPicture userPicture = base64ImageToJobPictureModel(request, savedUser);
             this.userPictureRepository.save(userPicture);
         }
         var jwtToken = jwtServiceImpl.generateToken(user);
@@ -62,6 +62,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    private UserPicture base64ImageToJobPictureModel(RegisterRequestDTO registerRequestDTO, User savedUser) throws NoSuchAlgorithmException, IOException {
+        final String base64ImageFull = registerRequestDTO.getPicture();
+        final byte[] imageBytesData = ImageUtil.convertBase64StringToBytes(base64ImageFull);
+        final String fullFileName = ImageUtil.calculateFileName(savedUser.getId().toString(), base64ImageFull, imageBytesData);
+        ImageUtil.writeImageOnFile(fullFileName, imageBytesData);
+        return createUserPictureModel(fullFileName, savedUser, registerRequestDTO);
+    }
+
+
+    private UserPicture createUserPictureModel(final String fullFileName, final User savedUser, RegisterRequestDTO request) {
+        UserPicture userPicture = new UserPicture();
+        userPicture.setPictureName(fullFileName);
+        userPicture.setUser(savedUser);
+        return userPicture;
     }
 
     public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
@@ -159,7 +175,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             UserPictureDTO userPictureDTO = new UserPictureDTO();
             userPictureDTO.setId(picture.getId());
             userPictureDTO.setUserId(user.getId());
-            userPictureDTO.setPicture(new String(picture.getPicture()));
+            userPictureDTO.setPictureName(picture.getPictureName());
             builder.picture(userPictureDTO);
         }
 

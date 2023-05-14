@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -31,7 +32,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
 
-    public ResponseEntity<AuthenticationResponseDTO> register(@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<AuthenticationResponseDTO> register(@RequestBody RegisterRequestDTO request) throws NoSuchAlgorithmException, IOException {
         return ResponseEntity.ok(service.register(request));
     }
 
