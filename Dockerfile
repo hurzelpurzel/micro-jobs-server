@@ -2,9 +2,9 @@
 FROM openjdk:17-alpine as builder
 COPY ./ ./
 RUN ./gradlew build --no-daemon
-#ARG JAR_FILE=build/libs/micro-jobs-server-1.0-SNAPSHOT.jar
-#RUN ls build/libs
-COPY ./build/libs/micro-jobs-server-1.0-SNAPSHOT.jar ./app.jar
+ARG JAR_FILE=build/libs/micro-jobs-server-1.0-SNAPSHOT.jar
+RUN ls build/libs
+RUN cp ${JAR_FILE} app.jar
 #RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM openjdk:17-alpine
